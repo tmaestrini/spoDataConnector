@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "tmaestrini-spo-test-client-side-solution",
+    "id": "85cb422c-d7cd-409f-b3fc-9fc2dab501ff",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0-rc.1"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "tmaestrini-spo-test description"
+      },
+      "longDescription": {
+        "default": "tmaestrini-spo-test description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "tmaestrini-spo-test Feature",
+        "description": "The feature that activates elements of the tmaestrini-spo-test solution.",
+        "id": "0ce8ce6c-421d-4401-8db2-fcade4d14801",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/tmaestrini-spo-test.sppkg"
+  }
+}
