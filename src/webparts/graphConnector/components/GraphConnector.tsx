@@ -18,7 +18,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       });
   }, [props]);
 
-  async function loadDataFromGraph() {
+  async function loadDataFromGraph(): Promise<void> {
     const path = props.api ?? '/me';
     let graphQuery = props.graphClient.api(path);
     if (props.version) graphQuery = graphQuery.version(props.version);
@@ -35,7 +35,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
       {apiError && <div className={styles.error}>{apiError}</div>}
 
-      {graphData && <div>Graph<pre>{JSON.stringify(graphData)}</pre></div>}
+      {graphData && <div><pre>{JSON.stringify(graphData)}</pre></div>}
     </div>
   );
 }
