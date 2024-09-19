@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
+import { DisplayMode, Version } from '@microsoft/sp-core-library';
 import {
   type IPropertyPaneConfiguration,
   PropertyPaneTextField
@@ -75,7 +75,8 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     if (!currentTheme) {
       return;
     }
-
+    
+    this.domElement.style.setProperty('--displayMode', this.displayMode === DisplayMode.Read ? 'none' : 'inherit');
     this._isDarkTheme = !!currentTheme.isInverted;
     const {
       semanticColors
