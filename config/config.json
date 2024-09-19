@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/helloWorld/HelloWorldWebPart.manifest.json"
         }
       ]
+    },
+    "graph-connector-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/graphConnector/GraphConnectorWebPart.js",
+          "manifest": "./src/webparts/graphConnector/GraphConnectorWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "HelloWorldWebPartStrings": "lib/webparts/helloWorld/loc/{locale}.js"
+    "HelloWorldWebPartStrings": "lib/webparts/helloWorld/loc/{locale}.js",
+    "GraphConnectorWebPartStrings": "lib/webparts/graphConnector/loc/{locale}.js"
   }
 }

@@ -1,7 +1,7 @@
 {
   "@microsoft/generator-sharepoint": {
     "plusBeta": false,
-    "isCreatingSolution": true,
+    "isCreatingSolution": false,
     "nodeVersion": "18.19.1",
     "sdksVersions": {
       "@microsoft/microsoft-graph-client": "3.0.2",
