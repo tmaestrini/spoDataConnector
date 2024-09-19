@@ -1,7 +1,7 @@
+import { MSGraphClientV3 } from '@microsoft/sp-http';
+
 export interface IGraphConnectorProps {
-  description: string;
-  isDarkTheme: boolean;
-  environmentMessage: string;
-  hasTeamsContext: boolean;
-  userDisplayName: string;
+  api: string;
+  version: 'beta' | 'v1.0';
+  graphClient: MSGraphClientV3;
 }

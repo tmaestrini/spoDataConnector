@@ -15,14 +15,17 @@
   "supportedHosts": ["SharePointWebPart"],
   "supportsThemeVariants": true,
 
-  "preconfiguredEntries": [{
-    "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
-    "group": { "default": "Advanced" },
-    "title": { "default": "GraphConnector" },
-    "description": { "default": "GraphConnector description" },
-    "officeFabricIconFontName": "PlugConnected",
-    "properties": {
-      "description": "GraphConnector"
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
+      "group": { "default": "Advanced" },
+      "title": { "default": "GraphConnector" },
+      "description": { "default": "GraphConnector description" },
+      "officeFabricIconFontName": "PlugConnected",
+      "properties": {
+        "api": "/me",
+        "version": "v1.0"
+      }
     }
-  }]
+  ]
 }
