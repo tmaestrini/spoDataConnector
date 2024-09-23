@@ -2,6 +2,9 @@ declare interface IGraphConnectorWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
   graphApiLabel: string;
+  graphFilterLabel: string;
+  graphSelectLabel: string;
+  graphExpandLabel: string;
   graphVersionLabel: string;
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;

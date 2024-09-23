@@ -5,7 +5,7 @@
       "name": "Hosted workbench",
       "type": "msedge",
       "request": "launch",
-      "url": "https://{tenantDomain}/_layouts/workbench.aspx",
+      "url": "https://tmaestrini.sharepoint.com/sites/Employeeonbaording/_layouts/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -16,7 +16,7 @@
       },
       "runtimeArgs": [
         "--remote-debugging-port=9222",
-        "-incognito"
+        // "-incognito"
       ]
     }
   ]

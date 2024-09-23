@@ -17,6 +17,9 @@ import { IGraphConnectorProps } from './components/IGraphConnectorProps';
 export interface IGraphConnectorWebPartProps {
   api: string;
   version: 'v1.0' | 'beta';
+  filter?: string;
+  select?: string;
+  expand?: string;
 }
 
 export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> {
@@ -29,6 +32,9 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       {
         api: this.properties.api,
         version: this.properties.version,
+        filter: this.properties.filter,
+        select: this.properties.select,
+        expand: this.properties.expand,
         graphClient: this.graphClient,
       }
     );
@@ -78,7 +84,8 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
               groupName: strings.BasicGroupName,
               groupFields: [
                 PropertyPaneTextField('api', {
-                  label: strings.graphApiLabel
+                  label: strings.graphApiLabel,
+                  placeholder: '/me, /me/manager, /me/joinedTeams, /users'
                 }),
                 PropertyPaneDropdown('version', {
                   label: strings.graphVersionLabel,
@@ -87,7 +94,18 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                     { key: 'beta', text: 'beta' },
                   ],
                 }),
-
+                PropertyPaneTextField('filter', {
+                  label: strings.graphFilterLabel,
+                  placeholder: `emailAddress eq 'jon@contoso.com'`
+                }),
+                PropertyPaneTextField('select', {
+                  label: strings.graphSelectLabel,
+                  placeholder: '$select=givenName,surname'
+                }),
+                PropertyPaneTextField('expand', {
+                  label: strings.graphExpandLabel,
+                  placeholder: 'members',
+                }),
               ]
             }
           ]
