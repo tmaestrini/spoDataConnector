@@ -7,8 +7,13 @@
   color: "[theme:bodyText, default: #323130]";
   display: var(--displayMode);
   color: var(--bodyText);
+
   &.teams {
     font-family: $ms-font-family-fallbacks;
+  }
+
+  h2 {
+    margin-top: 0px;
   }
 }
 

@@ -28,19 +28,6 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
   private graphClient: MSGraphClientV3;
   private graphData: any;
 
-
-  // private onGraphData = (data: any): void => {
-  //   this.graphData = data;
-
-  //   this.context.dynamicDataSourceManager.notifyPropertyChanged('item');
-  // }
-
-  // private onGraphData(data: any): void {
-  //   this.graphData = data;
-
-  //   this.context.dynamicDataSourceManager.notifyPropertyChanged('item');
-  // }
-
   public render(): void {
     const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
       GraphConnector,
