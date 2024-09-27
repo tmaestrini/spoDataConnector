@@ -6,6 +6,7 @@ import {
   PropertyPaneDropdown,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
+import { IDynamicDataCallables, IDynamicDataPropertyDefinition } from '@microsoft/sp-dynamic-data';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
@@ -22,9 +23,23 @@ export interface IGraphConnectorWebPartProps {
   expand?: string;
 }
 
-export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> {
+export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> implements IDynamicDataCallables {
 
   private graphClient: MSGraphClientV3;
+  private graphData: any;
+
+
+  // private onGraphData = (data: any): void => {
+  //   this.graphData = data;
+
+  //   this.context.dynamicDataSourceManager.notifyPropertyChanged('item');
+  // }
+
+  // private onGraphData(data: any): void {
+  //   this.graphData = data;
+
+  //   this.context.dynamicDataSourceManager.notifyPropertyChanged('item');
+  // }
 
   public render(): void {
     const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
@@ -36,6 +51,11 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         select: this.properties.select,
         expand: this.properties.expand,
         graphClient: this.graphClient,
+        onGraphData: (data: any) => {
+          this.graphData = data;
+
+          this.context.dynamicDataSourceManager.notifyPropertyChanged('item');
+        },
       }
     );
 
@@ -44,6 +64,19 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
 
   protected async onInit(): Promise<void> {
     this.graphClient = await this.context.msGraphClientFactory.getClient('3');
+    this.context.dynamicDataSourceManager.initializeSource(this);
+    return Promise.resolve();
+  }
+
+  public getPropertyDefinitions(): ReadonlyArray<IDynamicDataPropertyDefinition> {
+    return [
+      { id: 'item', title: 'Graph Data result' },
+    ]
+  }
+  public getPropertyValue(propertyId: string): void {
+    if (propertyId === 'item') return this.graphData;
+    console.log(this.graphData);
+    throw new Error(`property '${propertyId}' not found`);
   }
 
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
@@ -113,4 +146,9 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       ]
     };
   }
+
+  protected get disableReactivePropertyChanges(): boolean {
+    return true;
+  }
+
 }

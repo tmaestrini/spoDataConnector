@@ -2,10 +2,9 @@ import * as React from 'react';
 import styles from './GraphConnector.module.scss';
 import type { IGraphConnectorProps } from './IGraphConnectorProps';
 import { Icon } from '@fluentui/react';
-import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
 
 const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) => {
-  const [graphData, setGraphData] = React.useState<MicrosoftGraph.User>({} as MicrosoftGraph.User);
+  const [graphData, setGraphData] = React.useState<any>({});
   const [apiError, setApiError] = React.useState<string>();
   const [apiCall, setApiCall] = React.useState<string>();
 
@@ -26,10 +25,10 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     if (props.expand) graphQuery = graphQuery.expand(props.expand);
     if (props.filter) graphQuery = graphQuery.filter(encodeURIComponent(props.filter));
     try {
-      setApiCall(`${props.version}/${props.api}`);
+      setApiCall(`${props.version}${props.api}`);
       const data = await graphQuery.get();
-      console.log(data);
-      setGraphData(data);      
+      setGraphData(data);
+      if (props.onGraphData) props.onGraphData(data);
     } catch (error) {
       setApiError(error.message);
     }
@@ -41,7 +40,8 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
       {apiError && <div className={styles.error}>{apiError}</div>}
 
-      {graphData && <div><pre>{JSON.stringify(graphData)}</pre></div>}
+      {graphData && <div>👉 <code>{JSON.stringify(graphData['@odata.count'])}</code> records found. 
+      See <code>value</code> property for results.</div>}
     </div>
   );
 }

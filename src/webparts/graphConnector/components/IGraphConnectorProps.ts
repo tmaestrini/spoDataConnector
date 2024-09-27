@@ -7,4 +7,6 @@ export interface IGraphConnectorProps {
   select?: string;
   expand?: string;
   graphClient: MSGraphClientV3;
+
+  onGraphData?(data: any): void;
 }
