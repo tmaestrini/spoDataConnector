@@ -15,7 +15,7 @@
         "webpack:///../../../../../src/*": "${webRoot}/src/*"
       },
       "runtimeArgs": [
-        "--remote-debugging-port=9222",
+        "--remote-debugging-port=9222"
         // "-incognito"
       ]
     }
