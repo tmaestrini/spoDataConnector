@@ -41,7 +41,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         onGraphData: (data: any) => {
           this.graphData = data;
 
-          this.context.dynamicDataSourceManager.notifyPropertyChanged('item');
+          this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
         },
       }
     );
@@ -57,11 +57,11 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
 
   public getPropertyDefinitions(): ReadonlyArray<IDynamicDataPropertyDefinition> {
     return [
-      { id: 'item', title: 'Graph Data result' },
+      { id: 'graphData', title: 'Graph Data result' },
     ]
   }
   public getPropertyValue(propertyId: string): void {
-    if (propertyId === 'item') return this.graphData;
+    if (propertyId === 'graphData') return this.graphData;
     console.log(this.graphData);
     throw new Error(`property '${propertyId}' not found`);
   }
@@ -120,7 +120,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                 }),
                 PropertyPaneTextField('select', {
                   label: strings.graphSelectLabel,
-                  placeholder: '$select=givenName,surname'
+                  placeholder: 'givenName,surname'
                 }),
                 PropertyPaneTextField('expand', {
                   label: strings.graphExpandLabel,
