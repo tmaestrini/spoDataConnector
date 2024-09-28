@@ -1,4 +1,5 @@
 import { MSGraphClientV3 } from '@microsoft/sp-http';
+import { GraphError, GraphResult } from '../models/types';
 
 export interface IGraphConnectorProps {
   api: string;
@@ -8,5 +9,5 @@ export interface IGraphConnectorProps {
   expand?: string;
   graphClient: MSGraphClientV3;
 
-  onGraphData?(data: any): void;
+  onGraphDataResult?(data: GraphResult | GraphError): void;
 }

@@ -14,6 +14,7 @@ import { MSGraphClientV3 } from '@microsoft/sp-http';
 import * as strings from 'GraphConnectorWebPartStrings';
 import GraphConnector from './components/GraphConnector';
 import { IGraphConnectorProps } from './components/IGraphConnectorProps';
+import { GraphError, GraphResult } from './models/types';
 
 export interface IGraphConnectorWebPartProps {
   api: string;
@@ -26,7 +27,7 @@ export interface IGraphConnectorWebPartProps {
 export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> implements IDynamicDataCallables {
 
   private graphClient: MSGraphClientV3;
-  private graphData: any;
+  private graphData: GraphResult;
 
   public render(): void {
     const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
@@ -38,8 +39,13 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         select: this.properties.select,
         expand: this.properties.expand,
         graphClient: this.graphClient,
-        onGraphData: (data: any) => {
-          this.graphData = data;
+
+        onGraphDataResult: (data: GraphResult | GraphError) => {
+          if (data.type === 'result') {
+            this.graphData = data as GraphResult;
+          } else {
+            console.error(data);
+          }
 
           this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
         },
@@ -60,9 +66,8 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       { id: 'graphData', title: 'Graph Data result' },
     ]
   }
-  public getPropertyValue(propertyId: string): void {
+  public getPropertyValue(propertyId: string): GraphResult {
     if (propertyId === 'graphData') return this.graphData;
-    console.log(this.graphData);
     throw new Error(`property '${propertyId}' not found`);
   }
 
