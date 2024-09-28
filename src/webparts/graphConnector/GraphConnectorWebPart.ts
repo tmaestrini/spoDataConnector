@@ -42,6 +42,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
 
         onGraphDataResult: (data: GraphResult | GraphError) => {
           if (data.type === 'result') {
+            delete (data as { type?: string }).type; // delete type property for better readability
             this.graphData = data as GraphResult;
           } else {
             console.error(data);
