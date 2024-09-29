@@ -52,7 +52,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
           👉 <code>{JSON.stringify(graphData.value['@odata.count'])}</code> records found.
           See <code>value</code> property in connected webparts for results.
         </div>
-        <PrimaryButton onClick={() => setIsPopupVisible(!isPopupVisible)} text={`${isPopupVisible ? 'Hide results' : 'Show results'}`} />
+        <PrimaryButton onClick={() => setIsPopupVisible(!isPopupVisible)} text={`${isPopupVisible ? 'Hide result(s)' : 'Show result(s)'}`} />
         {isPopupVisible && (
           <Popup>
             <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(graphData.value) }} />
