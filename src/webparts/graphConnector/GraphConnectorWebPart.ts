@@ -2,13 +2,17 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { DisplayMode, Version } from '@microsoft/sp-core-library';
 import {
+  DynamicDataSharedDepth,
   type IPropertyPaneConfiguration,
   PropertyPaneDropdown,
+  PropertyPaneDynamicField,
+  PropertyPaneDynamicFieldSet,
+  PropertyPaneLabel,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane';
 import { IDynamicDataCallables, IDynamicDataPropertyDefinition } from '@microsoft/sp-dynamic-data';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-import { IReadonlyTheme } from '@microsoft/sp-component-base';
+import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp-webpart-base';
+import { DynamicProperty, IReadonlyTheme } from '@microsoft/sp-component-base';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
 
 import * as strings from 'GraphConnectorWebPartStrings';
@@ -17,6 +21,9 @@ import { IGraphConnectorProps } from './components/IGraphConnectorProps';
 import { GraphError, GraphResult } from './models/types';
 
 export interface IGraphConnectorWebPartProps {
+  sourceSelector: 'none' | 'dynamicData';
+  dataSource?: DynamicProperty<any>;
+
   api: string;
   version: 'v1.0' | 'beta';
   filter?: string;
@@ -30,9 +37,12 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
   private graphData: GraphResult;
 
   public render(): void {
+    const dataSourceValues = this.properties.dataSource?.tryGetValue();
+
     const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
       GraphConnector,
       {
+        dataFromDynamicSource: dataSourceValues,
         api: this.properties.api,
         version: this.properties.version,
         filter: this.properties.filter,
@@ -72,6 +82,15 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     throw new Error(`property '${propertyId}' not found`);
   }
 
+  // dynamic data method
+  protected get propertiesMetadata(): IWebPartPropertiesMetadata {
+    return {
+      'dataSource': {
+        dynamicPropertyType: 'object'
+      },
+    };
+  }
+
   protected onThemeChanged(currentTheme: IReadonlyTheme | undefined): void {
     if (!currentTheme) {
       return;
@@ -107,8 +126,42 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
           },
           groups: [
             {
+              groupName: "Data Connection",
+              groupFields: [
+                PropertyPaneLabel('dataSourceLabel', {
+                  text: `Display content from Graph API and make it available for other webparts.
+                  You can also connect to data sources (page environment or other webparts on this page 
+                  that provide data source functionality) by selecting the dropdown field 'Connect to source'.`,
+                }),
+                PropertyPaneDropdown('sourceSelector', {
+                  label: "Connect to source",
+                  options: [
+                    { key: 'none', text: 'None (no connection to other webparts)' },
+                    { key: 'dynamicData', text: 'Internal data source' },
+                  ],
+                }),
+                ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneDynamicFieldSet({
+                  label: "",
+                  fields: [
+                    PropertyPaneDynamicField('dataSource', {
+                      label: "Internal Data Source",
+                      propertyValueDepth: DynamicDataSharedDepth.Property,
+                      sourcesLabel: "Available data sources",
+                    }),
+                  ],
+                })] : []),
+              ],
+            },
+            {
               groupName: strings.BasicGroupName,
               groupFields: [
+                ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
+                  text: `Ingest the desired attribute from the result of the selected data source in the API field.
+                  Use the curly brackets {{...}} as a placeholder to insert the value.`,
+                })] : []),
+                ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
+                  text: `Example: {{siteTitle}} or {{value}}.`,
+                })] : []),
                 PropertyPaneDropdown('version', {
                   label: strings.graphVersionLabel,
                   options: [
@@ -132,11 +185,11 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                   label: strings.graphExpandLabel,
                   placeholder: 'members',
                 }),
-              ]
-            }
-          ]
-        }
-      ]
+              ],
+            },
+          ],
+        },
+      ],
     };
   }
 

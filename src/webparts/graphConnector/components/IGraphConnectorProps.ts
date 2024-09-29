@@ -2,6 +2,9 @@ import { MSGraphClientV3 } from '@microsoft/sp-http';
 import { GraphError, GraphResult } from '../models/types';
 
 export interface IGraphConnectorProps {
+  dataFromDynamicSource?: any;
+
+  // Graph API request
   api: string;
   version: 'beta' | 'v1.0';
   filter?: string;
@@ -9,5 +12,6 @@ export interface IGraphConnectorProps {
   expand?: string;
   graphClient: MSGraphClientV3;
 
+  // Callbacks
   onGraphDataResult?(data: GraphResult | GraphError): void;
 }
