@@ -1,11 +1,20 @@
 declare interface IGraphConnectorWebPartStrings {
   PropertyPaneDescription: string;
-  BasicGroupName: string;
-  graphApiLabel: string;
-  graphFilterLabel: string;
-  graphSelectLabel: string;
-  graphExpandLabel: string;
-  graphVersionLabel: string;
+  DataSource: {
+    GroupNameLabel: string;
+    DataSourceDescriptionText: string;
+    SourceSelectorLabel: string;
+    DynamicDataLabel: string;
+  },
+  GraphAPI: { 
+    BasicGroupName: string;
+    MainDescriptionText: string;
+    ApiLabel: string;
+    FilterLabel: string;
+    SelectLabel: string;
+    ExpandLabel: string;
+    VersionLabel: string;
+  }
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;
   AppLocalEnvironmentOffice: string;

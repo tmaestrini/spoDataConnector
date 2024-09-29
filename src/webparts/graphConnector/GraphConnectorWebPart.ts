@@ -126,15 +126,13 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
           },
           groups: [
             {
-              groupName: "Data Connection",
+              groupName: strings.DataSource.GroupNameLabel,
               groupFields: [
-                PropertyPaneLabel('dataSourceLabel', {
-                  text: `Display content from Graph API and make it available for other webparts.
-                  You can also connect to data sources (page environment or other webparts on this page 
-                  that provide data source functionality) by selecting the dropdown field 'Connect to source'.`,
+                PropertyPaneLabel('dataSourceDescriptionLabel', {
+                  text: strings.DataSource.DataSourceDescriptionText,
                 }),
                 PropertyPaneDropdown('sourceSelector', {
-                  label: "Connect to source",
+                  label: strings.DataSource.SourceSelectorLabel,
                   options: [
                     { key: 'none', text: 'Static content (None)' },
                     { key: 'dynamicData', text: 'Dynamic data (Internal data source)' },
@@ -144,7 +142,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                   label: "",
                   fields: [
                     PropertyPaneDynamicField('dataSource', {
-                      label: "Dynamic data (Internal data source)",
+                      label: strings.DataSource.DynamicDataLabel,
                       propertyValueDepth: DynamicDataSharedDepth.Property,
                       sourcesLabel: "Available data sources",
                     }),
@@ -153,37 +151,36 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
               ],
             },
             {
-              groupName: strings.BasicGroupName,
+              groupName: strings.GraphAPI.BasicGroupName,
               groupFields: [
                 ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
-                  text: `Ingest the desired attribute from the result of the selected data source in the API field.
-                  Use the curly brackets {{...}} as a placeholder to insert the value.`,
+                  text: strings.GraphAPI.MainDescriptionText,
                 })] : []),
                 ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
                   text: `Example: {{siteTitle}} or {{value}}.`,
                 })] : []),
                 PropertyPaneDropdown('version', {
-                  label: strings.graphVersionLabel,
+                  label: strings.GraphAPI.VersionLabel,
                   options: [
                     { key: 'v1.0', text: 'v1.0' },
                     { key: 'beta', text: 'beta' },
                   ],
                 }),
                 PropertyPaneTextField('api', {
-                  label: strings.graphApiLabel,
+                  label: strings.GraphAPI.ApiLabel,
                   placeholder: '/me, /me/manager, /me/joinedTeams, /users',
                   description: 'https://graph.microsoft.com',
                 }),
                 PropertyPaneTextField('filter', {
-                  label: strings.graphFilterLabel,
+                  label: strings.GraphAPI.FilterLabel,
                   placeholder: `emailAddress eq 'jon@contoso.com'`
                 }),
                 PropertyPaneTextField('select', {
-                  label: strings.graphSelectLabel,
+                  label: strings.GraphAPI.SelectLabel,
                   placeholder: 'givenName,surname'
                 }),
                 PropertyPaneTextField('expand', {
-                  label: strings.graphExpandLabel,
+                  label: strings.GraphAPI.ExpandLabel,
                   placeholder: 'members',
                 }),
               ],
