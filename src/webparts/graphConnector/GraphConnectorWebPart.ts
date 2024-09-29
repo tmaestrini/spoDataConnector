@@ -109,16 +109,16 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('api', {
-                  label: strings.graphApiLabel,
-                  placeholder: '/me, /me/manager, /me/joinedTeams, /users'
-                }),
                 PropertyPaneDropdown('version', {
                   label: strings.graphVersionLabel,
                   options: [
                     { key: 'v1.0', text: 'v1.0' },
                     { key: 'beta', text: 'beta' },
                   ],
+                }),
+                PropertyPaneTextField('api', {
+                  label: strings.graphApiLabel,
+                  placeholder: '/me, /me/manager, /me/joinedTeams, /users'
                 }),
                 PropertyPaneTextField('filter', {
                   label: strings.graphFilterLabel,
