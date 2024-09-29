@@ -171,7 +171,8 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                 }),
                 PropertyPaneTextField('api', {
                   label: strings.graphApiLabel,
-                  placeholder: '/me, /me/manager, /me/joinedTeams, /users'
+                  placeholder: '/me, /me/manager, /me/joinedTeams, /users',
+                  description: 'https://graph.microsoft.com',
                 }),
                 PropertyPaneTextField('filter', {
                   label: strings.graphFilterLabel,

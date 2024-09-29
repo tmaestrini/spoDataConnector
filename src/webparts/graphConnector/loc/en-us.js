@@ -2,10 +2,10 @@ define([], function () {
   return {
     "PropertyPaneDescription": "Description",
     "BasicGroupName": "Graph API request",
-    "graphApiLabel": "API call",
+    "graphApiLabel": "API endpoint",
     "graphFilterLabel": "Filter ($filter attribute)",
     "graphSelectLabel": "Select ($select attribute)",
-    "graphVersionLabel": "Version",
+    "graphVersionLabel": "Graph version",
     "graphExpandLabel": "Expand ($expand attribute)",
     "AppLocalEnvironmentSharePoint": "The app is running on your local environment as SharePoint web part",
     "AppLocalEnvironmentTeams": "The app is running on your local environment as Microsoft Teams app",
