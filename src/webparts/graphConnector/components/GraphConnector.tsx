@@ -4,6 +4,7 @@ import type { IGraphConnectorProps } from './IGraphConnectorProps';
 import { Icon, Popup, PrimaryButton } from '@fluentui/react';
 import { GraphError, GraphResult } from '../models/types';
 import { prettyPrintJson } from 'pretty-print-json';
+import * as Handlebars from 'handlebars';
 
 const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) => {
   const [graphData, setGraphData] = React.useState<GraphResult>({} as GraphResult);
@@ -21,7 +22,12 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
   }, [props]);
 
   async function loadDataFromGraph(): Promise<void> {
-    const path = props.api ?? 'me';
+    function tryIngestDataToApiPath(path: string): string {
+      if (!props.dataFromDynamicSource) return path;
+      return Handlebars.compile(path)(props.dataFromDynamicSource);
+    }
+
+    const path = tryIngestDataToApiPath(props.api ?? 'me');
     let graphQuery = props.graphClient.api(path);
     if (props.version) graphQuery = graphQuery.version(props.version);
     if (props.select) graphQuery = graphQuery.select(props.select);
@@ -29,7 +35,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     if (props.filter) graphQuery = graphQuery.filter(encodeURIComponent(props.filter));
 
     try {
-      setApiCall(`${props.version}${props.api}`);
+      setApiCall(`${props.version}${path}`);
       const data = await graphQuery.get();
 
       setGraphData({ type: 'result', value: { ...data } } as GraphResult);
@@ -45,13 +51,14 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     <div className={styles.graphConnector}>
       <h2><Icon iconName="PlugConnected" /> Graph Connector</h2>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
-      {apiError && <div className={styles.error}>Error in api call: <br/>{apiError.body}</div>}
+      {apiError && <div className={styles.error}>Error in api call: <br />{apiError.body}</div>}
 
       {graphData.type === 'result' && <>
         <div style={{ marginBottom: '1em' }}>
           👉 <code>{JSON.stringify(graphData.value['@odata.count'])}</code> records found.
           See <code>value</code> property in connected webparts for results.
         </div>
+
         <PrimaryButton onClick={() => setIsPopupVisible(!isPopupVisible)} text={`${isPopupVisible ? 'Hide result(s)' : 'Show result(s)'}`} />
         {isPopupVisible && (
           <Popup>

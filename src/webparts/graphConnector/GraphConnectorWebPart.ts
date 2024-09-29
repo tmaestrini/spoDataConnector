@@ -37,7 +37,12 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
   private graphData: GraphResult;
 
   public render(): void {
-    const dataSourceValues = this.properties.dataSource?.tryGetValue();
+    let dataSourceValues: any;
+    if (this.properties.sourceSelector === 'dynamicData') {
+      dataSourceValues = this.properties.dataSource?.tryGetValue();
+    } else {
+      dataSourceValues = undefined;
+    }
 
     const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
       GraphConnector,
