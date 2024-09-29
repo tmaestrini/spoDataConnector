@@ -136,15 +136,15 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                 PropertyPaneDropdown('sourceSelector', {
                   label: "Connect to source",
                   options: [
-                    { key: 'none', text: 'None (no connection to other webparts)' },
-                    { key: 'dynamicData', text: 'Internal data source' },
+                    { key: 'none', text: 'Static content (None)' },
+                    { key: 'dynamicData', text: 'Dynamic data (Internal data source)' },
                   ],
                 }),
                 ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneDynamicFieldSet({
                   label: "",
                   fields: [
                     PropertyPaneDynamicField('dataSource', {
-                      label: "Internal Data Source",
+                      label: "Dynamic data (Internal data source)",
                       propertyValueDepth: DynamicDataSharedDepth.Property,
                       sourcesLabel: "Available data sources",
                     }),
