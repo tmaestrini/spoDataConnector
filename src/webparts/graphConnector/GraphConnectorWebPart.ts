@@ -35,19 +35,15 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
 
   private graphClient: MSGraphClientV3;
   private graphData: GraphResult;
+  private dataSourceValues: any;
 
   public render(): void {
-    let dataSourceValues: any;
-    if (this.properties.sourceSelector === 'dynamicData') {
-      dataSourceValues = this.properties.dataSource?.tryGetValue();
-    } else {
-      dataSourceValues = undefined;
-    }
+    this.tryFetchDataSourceValues();
 
     const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
       GraphConnector,
       {
-        dataFromDynamicSource: dataSourceValues,
+        dataFromDynamicSource: this.dataSourceValues,
         api: this.properties.api,
         version: this.properties.version,
         filter: this.properties.filter,
@@ -69,6 +65,14 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     );
 
     ReactDom.render(element, this.domElement);
+  }
+
+  private tryFetchDataSourceValues(): void {
+    if (this.properties.sourceSelector === 'dynamicData') {
+      this.dataSourceValues = this.properties.dataSource?.tryGetValue();
+    } else {
+      this.dataSourceValues = undefined;
+    }
   }
 
   protected async onInit(): Promise<void> {
@@ -122,6 +126,12 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     return Version.parse('1.0');
   }
 
+  protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
+    if (propertyPath === 'sourceSelector') {
+      this.tryFetchDataSourceValues()
+    }
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -172,13 +182,16 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                   ],
                 }),
                 PropertyPaneTextField('api', {
-                  label: strings.GraphAPI.ApiLabel,
+                  label: `${strings.GraphAPI.ApiLabel} ${this.dataSourceValues && '👇 use dynamic data'}`,
                   placeholder: '/me, /me/manager, /me/joinedTeams, /users',
-                  description: 'https://graph.microsoft.com',
+                  description: `https://graph.microsoft.com${this.properties.api}`,
+                  multiline: true,
+
                 }),
                 PropertyPaneTextField('filter', {
-                  label: strings.GraphAPI.FilterLabel,
-                  placeholder: `emailAddress eq 'jon@contoso.com'`
+                  label: `${strings.GraphAPI.FilterLabel} ${this.dataSourceValues && '👇 use dynamic data'}`,
+                  placeholder: `emailAddress eq 'jon@contoso.com'`,
+                  multiline: true,
                 }),
                 PropertyPaneTextField('select', {
                   label: strings.GraphAPI.SelectLabel,
