@@ -4,6 +4,7 @@
   overflow: hidden;
   padding: 0px;
   margin: 0px;
+  font-family: var(--fontFamilyCustomFont100, var(--fontFamilyBase));
   color: "[theme:bodyText, default: #323130]";
   display: var(--displayMode);
   color: var(--bodyText);
