@@ -23,18 +23,18 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
   }, [props]);
 
   async function loadDataFromGraph(): Promise<void> {
-    function tryIngestData(template: string): string {
+    function tryIngestDynamicData(template: string): string {
       if (!props.dataFromDynamicSource) return template;
       return Handlebars.compile(template)(props.dataFromDynamicSource);
     }
 
-    const path = tryIngestData(props.api ?? 'me');
+    const path = tryIngestDynamicData(props.api ?? 'me');
     
     let graphQuery = props.graphClient.api(path);
     if (props.version) graphQuery = graphQuery.version(props.version);
     if (props.select) graphQuery = graphQuery.select(props.select);
     if (props.expand) graphQuery = graphQuery.expand(props.expand);
-    if (props.filter) graphQuery = graphQuery.filter(encodeURIComponent(tryIngestData(props.filter)));
+    if (props.filter) graphQuery = graphQuery.filter(encodeURIComponent(tryIngestDynamicData(props.filter)));
 
     try {
       setApiCall(`${props.version}${path}`);
