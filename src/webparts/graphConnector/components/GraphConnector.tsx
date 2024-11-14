@@ -68,14 +68,14 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
           </Popup>
         )}
         {props.dataFromDynamicSource && (
-          <>
+          <div>
             <PrimaryButton onClick={() => setDynamicDataPopupVisible(!isDynamicDataPopupVisible)} text={`${isDynamicDataPopupVisible ? 'Hide dynamic data' : 'Show dynamic data'}`} />
             {isDynamicDataPopupVisible &&
               <Popup>
                 <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(props.dataFromDynamicSource) }} />
               </Popup>
             }
-          </>
+          </div>
         )}
       </>}
     </div>
