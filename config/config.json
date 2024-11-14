@@ -13,7 +13,6 @@
   },
   "externals": {},
   "localizedResources": {
-    "HelloWorldWebPartStrings": "lib/webparts/helloWorld/loc/{locale}.js",
     "GraphConnectorWebPartStrings": "lib/webparts/graphConnector/loc/{locale}.js"
   }
 }
