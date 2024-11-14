@@ -35,6 +35,8 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     if (props.select) graphQuery = graphQuery.select(props.select);
     if (props.expand) graphQuery = graphQuery.expand(props.expand);
     if (props.filter) graphQuery = graphQuery.filter(encodeURIComponent(tryIngestDynamicData(props.filter)));
+    
+    graphQuery.header('ConsistencyLevel', 'eventual');
 
     try {
       setApiCall(`${props.version}${path}`);
@@ -57,7 +59,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
 
       {graphData.type === 'result' && <>
         <div style={{ marginBottom: '1em' }}>
-          👉 <code>{JSON.stringify(graphData.value['@odata.count'])}</code> records found.
+          👉 <code>{JSON.stringify(graphData.value['@odata.count'])}</code> record(s) found.
           See <code>value</code> property in connected webparts for results.
         </div>
 
