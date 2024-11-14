@@ -24,7 +24,8 @@
       "officeFabricIconFontName": "PlugConnected",
       "properties": {
         "api": "/me",
-        "version": "v1.0"
+        "version": "v1.0",
+        "sourceSelector": "none"
       }
     }
   ]
