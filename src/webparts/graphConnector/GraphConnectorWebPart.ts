@@ -22,7 +22,7 @@ import { GraphError, GraphResult } from './models/types';
 
 export interface IGraphConnectorWebPartProps {
   sourceSelector: 'none' | 'dynamicData';
-  dataSource?: DynamicProperty<any>;
+  dataSource?: DynamicProperty<undefined>;
 
   api: string;
   version: 'v1.0' | 'beta';
@@ -35,7 +35,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
 
   private graphClient: MSGraphClientV3;
   private graphData: GraphResult;
-  private dataSourceValues: any;
+  private dataSourceValues: undefined;
 
   public render(): void {
     this.tryFetchDataSourceValues();
@@ -126,7 +126,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     return Version.parse('1.0');
   }
 
-  protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
+  protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: string, newValue: string): void {
     if (propertyPath === 'sourceSelector') {
       this.tryFetchDataSourceValues()
     }
