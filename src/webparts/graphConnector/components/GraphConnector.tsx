@@ -59,7 +59,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
 
       {graphData.type === 'result' && <>
         <div style={{ marginBottom: '1em' }}>
-          👉 <code>{JSON.stringify(graphData.value['@odata.count'])}</code> record(s) found.
+          👉 <code>{JSON.stringify((graphData.value)['@odata.count'])}</code> valid record(s) found.
           See <code>value</code> property in connected webparts for results.
         </div>
 

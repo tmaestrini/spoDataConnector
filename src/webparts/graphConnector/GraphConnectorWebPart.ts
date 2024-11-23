@@ -86,6 +86,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       { id: 'graphData', title: 'Graph Data result' },
     ]
   }
+
   public getPropertyValue(propertyId: string): GraphResult {
     if (propertyId === 'graphData') return this.graphData;
     throw new Error(`property '${propertyId}' not found`);
@@ -182,15 +183,15 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                   ],
                 }),
                 PropertyPaneTextField('api', {
-                  label: `${strings.GraphAPI.ApiLabel} ${this.dataSourceValues && '👇 use dynamic data'}`,
+                  label: `${strings.GraphAPI.ApiLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
                   placeholder: '/me, /me/manager, /me/joinedTeams, /users',
                   description: `https://graph.microsoft.com${this.properties.api}`,
                   multiline: true,
 
                 }),
                 PropertyPaneTextField('filter', {
-                  label: `${strings.GraphAPI.FilterLabel} ${this.dataSourceValues && '👇 use dynamic data'}`,
-                  placeholder: `emailAddress eq 'jon@contoso.com'`,
+                  label: `${strings.GraphAPI.FilterLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
+                  placeholder: `emailAddress eq 'john@contoso.com'`,
                   multiline: true,
                 }),
                 PropertyPaneTextField('select', {
