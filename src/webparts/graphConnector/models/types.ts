@@ -1,6 +1,6 @@
-export type GraphResult = {
+export type GraphResult<T = never> = {
   type: 'result',
-  value: any,
+  value: T,
 }
 
 export type GraphError = {

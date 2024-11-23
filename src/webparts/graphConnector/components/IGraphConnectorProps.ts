@@ -1,8 +1,8 @@
 import { MSGraphClientV3 } from '@microsoft/sp-http';
 import { GraphError, GraphResult } from '../models/types';
 
-export interface IGraphConnectorProps {
-  dataFromDynamicSource?: any;
+export interface IGraphConnectorProps<T = never> {
+  dataFromDynamicSource?: T;
 
   // Graph API request
   api: string;
