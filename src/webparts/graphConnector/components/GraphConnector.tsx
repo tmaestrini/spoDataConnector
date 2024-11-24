@@ -4,14 +4,13 @@ import type { IGraphConnectorProps } from './IGraphConnectorProps';
 import { GraphError, GraphResult } from '../models/types';
 import { prettyPrintJson } from 'pretty-print-json';
 import * as Handlebars from 'handlebars';
-import { Icon, Popup, PrimaryButton } from 'office-ui-fabric-react';
+import { Icon, Stack } from 'office-ui-fabric-react';
+import * as strings from 'GraphConnectorWebPartStrings';
 
 const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) => {
   const [graphData, setGraphData] = React.useState<GraphResult>({} as GraphResult);
   const [apiError, setApiError] = React.useState<GraphError | undefined>(undefined);
   const [apiCall, setApiCall] = React.useState<string>();
-  const [isGraphDataPopupVisible, setGraphDataPopupVisible] = React.useState(false);
-  const [isDynamicDataPopupVisible, setDynamicDataPopupVisible] = React.useState(false);
 
   React.useEffect(() => {
     setApiError(undefined);
@@ -29,13 +28,13 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     }
 
     const path = tryIngestDynamicData(props.api ?? 'me');
-    
+
     let graphQuery = props.graphClient.api(path);
     if (props.version) graphQuery = graphQuery.version(props.version);
     if (props.select) graphQuery = graphQuery.select(props.select);
     if (props.expand) graphQuery = graphQuery.expand(props.expand);
     if (props.filter) graphQuery = graphQuery.filter(encodeURIComponent(tryIngestDynamicData(props.filter)));
-    
+
     graphQuery.header('ConsistencyLevel', 'eventual');
 
     try {
@@ -51,6 +50,17 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     }
   }
 
+  function CollapsibleSection(props: { label: string, value: string }): JSX.Element {
+    const { label, value } = props;
+    return (
+      <details>
+        <summary>
+          {label}
+        </summary>
+        <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(value) }} />
+      </details>);
+  }
+
   return (
     <div className={styles.graphConnector}>
       <h2><Icon iconName="PlugConnected" /> Graph Connector</h2>
@@ -63,22 +73,10 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
           See <code>value</code> property in connected webparts for results.
         </div>
 
-        <PrimaryButton onClick={() => setGraphDataPopupVisible(!isGraphDataPopupVisible)} text={`${isGraphDataPopupVisible ? 'Hide result(s) from Graph' : 'Show result(s) from Graph'}`} />
-        {isGraphDataPopupVisible && (
-          <Popup>
-            <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(graphData.value) }} />
-          </Popup>
-        )}
-        {props.dataFromDynamicSource && (
-          <div>
-            <PrimaryButton onClick={() => setDynamicDataPopupVisible(!isDynamicDataPopupVisible)} text={`${isDynamicDataPopupVisible ? 'Hide dynamic data' : 'Show dynamic data'}`} />
-            {isDynamicDataPopupVisible &&
-              <Popup>
-                <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(props.dataFromDynamicSource) }} />
-              </Popup>
-            }
-          </div>
-        )}
+        <Stack tokens={{ childrenGap: 10 }}>
+          <CollapsibleSection label={strings.GraphConnector.ShowGraphResultsLabel} value={graphData.value} />
+          {props.dataFromDynamicSource && <CollapsibleSection label={strings.GraphConnector.ShowDynamicDataLabel} value={props.dataFromDynamicSource ?? ''} />}
+        </Stack>
       </>}
     </div>
   );
