@@ -63,7 +63,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
 
   return (
     <div className={styles.graphConnector}>
-      <h2><Icon iconName="PlugConnected" />Microsoft Graph Connection</h2>
+      <h2><Icon iconName="PlugConnected" />Microsoft Graph API Connection</h2>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
       {apiError && <div className={styles.error}>Error in api call: <br />{apiError.body}</div>}
 
