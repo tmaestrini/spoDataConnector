@@ -1,25 +1,25 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "tmaestrini-spo-test-client-side-solution",
+    "name": "tmaestrini-spo-connect-client-side-solution",
     "id": "85cb422c-d7cd-409f-b3fc-9fc2dab501ff",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "",
-      "websiteUrl": "",
+      "name": "Tobias Maestrini",
+      "websiteUrl": "https://tmaestrini.github.io/",
       "privacyUrl": "",
       "termsOfUseUrl": "",
       "mpnId": "Undefined-1.20.0-rc.1"
     },
     "metadata": {
       "shortDescription": {
-        "default": "tmaestrini-spo-test description"
+        "default": "tmaestrini-spo-connect description"
       },
       "longDescription": {
-        "default": "tmaestrini-spo-test description"
+        "default": "tmaestrini-spo-connect description"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -27,14 +27,14 @@
     },
     "features": [
       {
-        "title": "tmaestrini-spo-test Feature",
-        "description": "The feature that activates elements of the tmaestrini-spo-test solution.",
+        "title": "tmaestrini-spo-connect Feature",
+        "description": "The feature that activates elements of the tmaestrini-connect solution.",
         "id": "0ce8ce6c-421d-4401-8db2-fcade4d14801",
         "version": "1.0.0.0"
       }
     ]
   },
   "paths": {
-    "zippedPackage": "solution/tmaestrini-spo-test.sppkg"
+    "zippedPackage": "solution/tmaestrini-spo-connect.sppkg"
   }
 }
