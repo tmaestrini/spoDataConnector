@@ -18,11 +18,13 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
     "group": { "default": "Advanced" },
-    "title": { "default": "SharePointConnector" },
-    "description": { "default": "SharePointConnector description" },
-    "officeFabricIconFontName": "Page",
+    "title": { "default": "SharePoint API Connection" },
+    "description": { "default": "SharePoint API Connection description" },
+    "officeFabricIconFontName": "PlugConnected",
     "properties": {
-      "description": "SharePointConnector"
+      "api": "/me",
+      "version": "v1.0",
+      "sourceSelector": "none"
     }
-  }]
+}]
 }

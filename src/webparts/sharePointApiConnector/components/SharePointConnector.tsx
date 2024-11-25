@@ -1,43 +1,68 @@
 import * as React from 'react';
 import styles from './SharePointConnector.module.scss';
 import type { ISharePointConnectorProps } from './ISharePointConnectorProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import { SharePointError, SharePointResult } from '../models/types';
+import * as Handlebars from 'handlebars';
+import { Icon } from '@fluentui/react';
+import * as strings from 'SharePointConnectorWebPartStrings';
+import RequestResults from '../../../common/components/RequestResults';
 
-export default class SharePointConnector extends React.Component<ISharePointConnectorProps> {
-  public render(): React.ReactElement<ISharePointConnectorProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
+const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = (props) => {
+  const [sharePointData, setSharePointData] = React.useState<SharePointResult>({} as SharePointResult);
+  const [apiError, setApiError] = React.useState<SharePointError | undefined>(undefined);
+  const [apiCall, setApiCall] = React.useState<string>();
 
-    return (
-      <section className={`${styles.sharePointConnectorWebPart} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
-        <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
-        </div>
-      </section>
-    );
+  React.useEffect(() => {
+    setApiError(undefined);
+    loadDataFromSharePoint()
+      .catch((e) => {
+        console.error(e);
+        setApiError(e.message);
+      });
+  }, [props]);
+
+  async function loadDataFromSharePoint(): Promise<void> {
+    function tryIngestDynamicData(template: string): string {
+      if (!props.dataFromDynamicSource) return template;
+      return Handlebars.compile(template)(props.dataFromDynamicSource);
+    }
+
+    const path = tryIngestDynamicData(props.api ?? 'me');
+
+    let sharePointQuery = props.sharePointClient.api(path);
+    if (props.version) sharePointQuery = sharePointQuery.version(props.version);
+    if (props.select) sharePointQuery = sharePointQuery.select(props.select);
+    if (props.expand) sharePointQuery = sharePointQuery.expand(props.expand);
+    if (props.filter) sharePointQuery = sharePointQuery.filter(encodeURIComponent(tryIngestDynamicData(props.filter)));
+
+    sharePointQuery.header('ConsistencyLevel', 'eventual');
+
+    try {
+      setApiCall(`${props.version}${path}`);
+      const data = await sharePointQuery.get();
+
+      setSharePointData({ type: 'result', value: { ...data } } as SharePointResult);
+      if (props.onSharePointDataResult) props.onSharePointDataResult({ type: 'result', value: { ...data } } as SharePointResult);
+    } catch (error) {
+      setSharePointData({} as SharePointResult);
+      setApiError({ ...error, type: 'error' } as SharePointError);
+      if (props.onSharePointDataResult) props.onSharePointDataResult({ ...error, type: 'error' } as SharePointError);
+    }
   }
+
+  return (
+    <div className={styles.sharePointConnector}>
+      <h2><Icon iconName="PlugConnected" /> SharePoint API Connection</h2>
+      <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
+      {apiError && <div className={styles.error}>Error in api call: <br />{apiError.body}</div>}
+
+      {sharePointData.type === 'result' && <>
+        <RequestResults data={sharePointData}
+          dataFromDynamicSource={props.dataFromDynamicSource}
+          labels={{ apiRequestResults: strings.SharePointConnector.ShowSharePointResultsLabel, dynamicDataResults: strings.SharePointConnector.ShowDynamicDataLabel }} />
+      </>}
+    </div>
+  );
 }
+
+export default SharePointConnector;
