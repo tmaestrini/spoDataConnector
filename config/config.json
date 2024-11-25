@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/graphApiConnector/GraphConnectorWebPart.manifest.json"
         }
       ]
+    },
+    "share-point-connector-web-part-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/sharePointApiConnector/SharePointConnectorWebPart.js",
+          "manifest": "./src/webparts/sharePointApiConnector/SharePointConnectorWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "GraphConnectorWebPartStrings": "lib/webparts/graphApiConnector/loc/{locale}.js"
+    "GraphConnectorWebPartStrings": "lib/webparts/graphApiConnector/loc/{locale}.js",
+    "SharePointConnectorWebPartStrings": "lib/webparts/sharePointApiConnector/loc/{locale}.js"
   }
 }
