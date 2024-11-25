@@ -3,7 +3,7 @@ import styles from './GraphConnector.module.scss';
 import type { IGraphConnectorProps } from './IGraphConnectorProps';
 import { GraphError, GraphResult } from '../models/types';
 import * as Handlebars from 'handlebars';
-import { Icon } from 'office-ui-fabric-react';
+import { Icon } from '@fluentui/react';
 import * as strings from 'GraphConnectorWebPartStrings';
 import RequestResults from '../../../common/components/RequestResults';
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Stack } from 'office-ui-fabric-react';
+import { Stack } from '@fluentui/react';
 import CollapsibleSection from './CollapsibleSection';
 import { GraphResult } from '../../webparts/graphApiConnector/models/types';
 
@@ -18,7 +18,7 @@ export default function RequestResults(props: ResultsSectionProps): JSX.Element 
     <>
       <div style={{ marginBottom: '1em' }}>
         👉 <code>{JSON.stringify((data.value)['@odata.count'])}</code> valid record(s) found.
-        See <code>value</code> property in connected webparts for results.
+        Refrence <code>value</code> property in connected webparts for results.
       </div>
 
       <Stack tokens={{ childrenGap: 10 }}>

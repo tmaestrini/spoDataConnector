@@ -13,7 +13,7 @@
     "serve": "fast-serve"
   },
   "dependencies": {
-    "@fluentui/react": "^7.204.0",
+    "@fluentui/react": "^8.106.4",
     "@microsoft/sp-component-base": "1.20.0",
     "@microsoft/sp-core-library": "1.20.0",
     "@microsoft/sp-lodash-subset": "1.20.0",
