@@ -18,7 +18,7 @@ export default function RequestResults(props: ResultsSectionProps): JSX.Element 
     <>
       <div style={{ marginBottom: '1em' }}>
         👉 <code>{JSON.stringify((data.value)['@odata.count'])}</code> valid record(s) found.
-        Refrence <code>value</code> property in connected webparts for results.
+        Reference <code>value</code> property in connected webparts for results.
       </div>
 
       <Stack tokens={{ childrenGap: 10 }}>
