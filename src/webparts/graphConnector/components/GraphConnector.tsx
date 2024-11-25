@@ -2,10 +2,10 @@ import * as React from 'react';
 import styles from './GraphConnector.module.scss';
 import type { IGraphConnectorProps } from './IGraphConnectorProps';
 import { GraphError, GraphResult } from '../models/types';
-import { prettyPrintJson } from 'pretty-print-json';
 import * as Handlebars from 'handlebars';
-import { Icon, Stack } from 'office-ui-fabric-react';
+import { Icon } from 'office-ui-fabric-react';
 import * as strings from 'GraphConnectorWebPartStrings';
+import RequestResults from '../../../common/components/RequestResults';
 
 const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) => {
   const [graphData, setGraphData] = React.useState<GraphResult>({} as GraphResult);
@@ -50,33 +50,16 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     }
   }
 
-  function CollapsibleSection(props: { label: string, value: string }): JSX.Element {
-    const { label, value } = props;
-    return (
-      <details>
-        <summary>
-          {label}
-        </summary>
-        <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(value) }} />
-      </details>);
-  }
-
   return (
     <div className={styles.graphConnector}>
-      <h2><Icon iconName="PlugConnected" />Microsoft Graph API Connection</h2>
+      <h2><Icon iconName="PlugConnected" /> Microsoft Graph API Connection</h2>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
       {apiError && <div className={styles.error}>Error in api call: <br />{apiError.body}</div>}
 
       {graphData.type === 'result' && <>
-        <div style={{ marginBottom: '1em' }}>
-          👉 <code>{JSON.stringify((graphData.value)['@odata.count'])}</code> valid record(s) found.
-          See <code>value</code> property in connected webparts for results.
-        </div>
-
-        <Stack tokens={{ childrenGap: 10 }}>
-          <CollapsibleSection label={strings.GraphConnector.ShowGraphResultsLabel} value={graphData.value} />
-          {props.dataFromDynamicSource && <CollapsibleSection label={strings.GraphConnector.ShowDynamicDataLabel} value={props.dataFromDynamicSource ?? ''} />}
-        </Stack>
+        <RequestResults data={graphData}
+          dataFromDynamicSource={props.dataFromDynamicSource}
+          labels={{ apiRequestResults: strings.GraphConnector.ShowGraphResultsLabel, dynamicDataResults: strings.GraphConnector.ShowDynamicDataLabel }} />
       </>}
     </div>
   );
