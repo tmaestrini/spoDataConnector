@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Stack } from 'office-ui-fabric-react';
 import CollapsibleSection from './CollapsibleSection';
-import { GraphResult } from '../../webparts/graphConnector/models/types';
+import { GraphResult } from '../../webparts/graphApiConnector/models/types';
 
 type ResultsSectionProps = {
   data: GraphResult;

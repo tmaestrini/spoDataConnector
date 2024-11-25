@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "tmaestrini-spo-connect-client-side-solution",
+    "name": "tmaestrini-api-connect-client-side-solution",
     "id": "85cb422c-d7cd-409f-b3fc-9fc2dab501ff",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "tmaestrini-spo-connect description"
+        "default": "tmaestrini-api-connect description"
       },
       "longDescription": {
-        "default": "tmaestrini-spo-connect description"
+        "default": "tmaestrini-api-connect description"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -27,14 +27,14 @@
     },
     "features": [
       {
-        "title": "tmaestrini-spo-connect Feature",
-        "description": "The feature that activates elements of the tmaestrini-connect solution.",
+        "title": "tmaestrini-api-connect Feature",
+        "description": "The feature that activates elements of the tmaestrini-api-connect solution.",
         "id": "0ce8ce6c-421d-4401-8db2-fcade4d14801",
         "version": "1.0.0.0"
       }
     ]
   },
   "paths": {
-    "zippedPackage": "solution/tmaestrini-spo-connect.sppkg"
+    "zippedPackage": "solution/tmaestrini-api-connect.sppkg"
   }
 }

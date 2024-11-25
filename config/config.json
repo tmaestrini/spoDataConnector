@@ -5,14 +5,14 @@
     "graph-connector-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/graphConnector/GraphConnectorWebPart.js",
-          "manifest": "./src/webparts/graphConnector/GraphConnectorWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/graphApiConnector/GraphConnectorWebPart.js",
+          "manifest": "./src/webparts/graphApiConnector/GraphConnectorWebPart.manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "GraphConnectorWebPartStrings": "lib/webparts/graphConnector/loc/{locale}.js"
+    "GraphConnectorWebPartStrings": "lib/webparts/graphApiConnector/loc/{locale}.js"
   }
 }
