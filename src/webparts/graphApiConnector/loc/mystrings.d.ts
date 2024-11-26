@@ -5,10 +5,11 @@ declare interface IGraphConnectorWebPartStrings {
     DataSourceDescriptionText: string;
     SourceSelectorLabel: string;
     DynamicDataLabel: string;
+    ApiSelectorLabel: string;
+    MainDescriptionText: string;
   };
   GraphAPI: { 
     BasicGroupName: string;
-    MainDescriptionText: string;
     ApiLabel: string;
     FilterLabel: string;
     SelectLabel: string;
@@ -18,6 +19,15 @@ declare interface IGraphConnectorWebPartStrings {
   GraphConnector: {
     ShowGraphResultsLabel: string;
     ShowDynamicDataLabel: string;
+  };
+  SharePointAPI: {
+    BasicGroupName: string;
+    MainDescriptionText: string;
+    ApiLabel: string;
+    FilterLabel: string;
+    SelectLabel: string;
+    ExpandLabel: string;
+    VersionLabel: string;
   };
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;

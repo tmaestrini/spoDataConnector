@@ -7,11 +7,12 @@ define([], function () {
       data source functionality) by selecting 'Dynamic data (Internal data source)' in the dropdown field 'Type of content'.`,
       SourceSelectorLabel: "Type of content",
       DynamicDataLabel: "Dynamic data (Internal data source)",
+      ApiSelectorLabel: "Select source API",
+      MainDescriptionText: `Ingest the desired attribute from the result of the selected data source in the API field.
+                  Use the curly brackets {{...}} as a placeholder to insert the value.`,
     },
     GraphAPI: {
       BasicGroupName: "Graph API request",
-      MainDescriptionText: `Ingest the desired attribute from the result of the selected data source in the API field.
-                  Use the curly brackets {{...}} as a placeholder to insert the value.`,
       ApiLabel: "API endpoint",
       FilterLabel: "Filter ($filter attribute)",
       SelectLabel: "Select ($select attribute)",
@@ -20,7 +21,17 @@ define([], function () {
     },
     GraphConnector: {
       ShowGraphResultsLabel: "Show result(s) from Graph",
-      ShowDynamicDataLabel: "Show dynamic data"
+      ShowDynamicDataLabel: "Show dynamic data",
+    },
+    SharePointAPI: {
+      BasicGroupName: "SharePoint API request",
+      MainDescriptionText: `Ingest the desired attribute from the result of the selected data source in the API field.
+                  Use the curly brackets {{...}} as a placeholder to insert the value.`,
+      ApiLabel: "API endpoint",
+      FilterLabel: "Filter ($filter attribute)",
+      SelectLabel: "Select ($select attribute)",
+      VersionLabel: "API version",
+      ExpandLabel: "Expand ($expand attribute)",
     },
     AppLocalEnvironmentSharePoint: "The app is running on your local environment as SharePoint web part",
     AppLocalEnvironmentTeams: "The app is running on your local environment as Microsoft Teams app",
