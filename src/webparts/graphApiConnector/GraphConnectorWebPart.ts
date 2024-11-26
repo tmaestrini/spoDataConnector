@@ -145,6 +145,10 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     }
   }
 
+  protected get disableReactivePropertyChanges(): boolean {
+    return true;
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -192,10 +196,6 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         },
       ],
     };
-  }
-
-  protected get disableReactivePropertyChanges(): boolean {
-    return true;
   }
 
   private get graphPropertyPaneGroup(): IPropertyPaneGroup {
