@@ -187,7 +187,6 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                     { key: 'sharePointApi', text: 'Call a SharePoint API' },
                   ],
                 }),
-
               ],
             },
             ...(this.properties.apiSelector === 'graphApi' ? [this.graphPropertyPaneGroup] : []),
