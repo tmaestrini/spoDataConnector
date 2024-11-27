@@ -1,6 +1,6 @@
 define([], function () {
   return {
-    PropertyPaneDescription: "Display content from Graph API and make it available for other webparts.",
+    PropertyPaneDescription: "Display content from Microsoft APIs and make it available for other webparts.",
     DataSource: {
       GroupNameLabel: "Data Source",
       DataSourceDescriptionText: `You can optionally connect to data sources (page environment or other webparts on this page that provide 
