@@ -59,7 +59,7 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       {graphData.type === 'result' && <>
         <RequestResults data={graphData}
           dataFromDynamicSource={props.dataFromDynamicSource}
-          labels={{ apiRequestResults: strings.GraphConnector.ShowGraphResultsLabel, dynamicDataResults: strings.GraphConnector.ShowDynamicDataLabel }} />
+          labels={{ apiRequestResults: strings.GraphConnector.ShowGraphResultsLabel, dynamicDataResults: strings.DataSource.ShowDynamicDataLabel }} />
       </>}
     </div>
   );
