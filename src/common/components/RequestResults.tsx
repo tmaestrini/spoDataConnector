@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Stack } from '@fluentui/react';
+import { MessageBar, MessageBarType, Stack } from '@fluentui/react';
 import CollapsibleSection from './CollapsibleSection';
-import { GraphResult } from '../../webparts/graphApiConnector/models/types';
+import { GraphResult, SharePointResult } from '../../webparts/graphApiConnector/models/types';
 
 type ResultsSectionProps = {
-  data: GraphResult;
+  data: GraphResult | SharePointResult;
   dataFromDynamicSource?: never;
   labels: {
     apiRequestResults: string;
@@ -16,10 +16,12 @@ export default function RequestResults(props: ResultsSectionProps): JSX.Element 
   const { data, dataFromDynamicSource, labels } = props;
   return (
     <>
-      <div style={{ marginBottom: '1em' }}>
-        👉 <code>{JSON.stringify((data.value)['@odata.count'])}</code> valid record(s) found.
-        Reference <code>value</code> property in connected webparts for results.
-      </div>
+      <Stack tokens={{ childrenGap: 1 }} style={{ margin: '1em 0' }}>
+        <MessageBar messageBarType={MessageBarType.success}>
+          <div>👉 <code>{JSON.stringify((data.value)['@odata.count'])}</code> valid record(s) found.</div>
+          <div>Reference <code>value</code> property in connected webparts for results</div>
+        </MessageBar>
+      </Stack>
 
       <Stack tokens={{ childrenGap: 10 }}>
         <CollapsibleSection label={labels.apiRequestResults} value={data.value} />
