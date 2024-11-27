@@ -18,7 +18,7 @@ export default function RequestResults(props: ResultsSectionProps): JSX.Element 
     <>
       <Stack tokens={{ childrenGap: 1 }} style={{ margin: '1rem 0' }}>
         <MessageBar messageBarType={MessageBarType.success}>
-          <div>👉 <code>{JSON.stringify((data.value)['@odata.count'])}</code> valid record(s) found.</div>
+          <div>👉 {data.value?.['@odata.count'] && <code>{JSON.stringify((data.value)['@odata.count'])}</code>} valid record(s) found.</div>
           <div>Reference <code>value</code> property in connected webparts for results</div>
         </MessageBar>
       </Stack>

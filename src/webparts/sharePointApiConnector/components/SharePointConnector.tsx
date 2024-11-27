@@ -4,11 +4,9 @@ import type { ISharePointConnectorProps } from './ISharePointConnectorProps';
 import { SharePointError, SharePointResult } from '../models/types';
 import * as Handlebars from 'handlebars';
 import { Icon } from '@fluentui/react';
-import * as strings from 'SharePointConnectorWebPartStrings';
-import RequestResults from '../../../common/components/RequestResults';
 
 const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = (props) => {
-  const [sharePointData, setSharePointData] = React.useState<SharePointResult>({} as SharePointResult);
+  const [_, setSharePointData] = React.useState<SharePointResult>({} as SharePointResult);
   const [apiError, setApiError] = React.useState<SharePointError | undefined>(undefined);
   const [apiCall, setApiCall] = React.useState<string>();
 
@@ -55,12 +53,6 @@ const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = 
       <h2><Icon iconName="PlugConnected" /> SharePoint API Connection</h2>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
       {apiError && <div className={styles.error}>Error in api call: <br />{apiError.body}</div>}
-
-      {sharePointData.type === 'result' && <>
-        <RequestResults data={sharePointData}
-          dataFromDynamicSource={props.dataFromDynamicSource}
-          labels={{ apiRequestResults: strings.SharePointConnector.ShowSharePointResultsLabel, dynamicDataResults: strings.SharePointConnector.ShowDynamicDataLabel }} />
-      </>}
     </div>
   );
 }

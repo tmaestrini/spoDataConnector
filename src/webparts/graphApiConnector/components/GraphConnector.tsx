@@ -3,7 +3,7 @@ import styles from './GraphConnector.module.scss';
 import type { IGraphConnectorProps } from './IGraphConnectorProps';
 import { GraphError, GraphResult } from '../models/types';
 import * as Handlebars from 'handlebars';
-import { Icon } from '@fluentui/react';
+import { Icon, MessageBar, MessageBarType, Stack } from '@fluentui/react';
 import * as strings from 'GraphConnectorWebPartStrings';
 import RequestResults from '../../../common/components/RequestResults';
 
@@ -41,12 +41,12 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       setApiCall(`${props.version}${path}`);
       const data = await graphQuery.get();
 
-      setGraphData({ type: 'result', value: { ...data } } as GraphResult);
-      if (props.onGraphDataResult) props.onGraphDataResult({ type: 'result', value: { ...data } } as GraphResult);
+      setGraphData({ value: { ...data } } as GraphResult);
+      if (props.onGraphDataResult) props.onGraphDataResult({ value: { ...data } } as GraphResult);
     } catch (error) {
       setGraphData({} as GraphResult);
-      setApiError({ ...error, type: 'error' } as GraphError);
-      if (props.onGraphDataResult) props.onGraphDataResult({ ...error, type: 'error' } as GraphError);
+      setApiError({ ...error} as GraphError);
+      if (props.onGraphDataError) props.onGraphDataError({ ...error} as GraphError);
     }
   }
 
@@ -54,10 +54,14 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
     <div className={styles.graphConnector}>
       <h2><Icon iconName="PlugConnected" /> Microsoft Graph API Connection</h2>
       <div>Graph api call: {apiCall && <code>{apiCall}</code>}</div>
-      {apiError && <div className={styles.error}>Error in api call: <br />{apiError.body}</div>}
-
-      {graphData.type === 'result' && <>
-        <RequestResults data={graphData}
+      {apiError &&
+              <Stack tokens={{ childrenGap: 1 }} style={{ margin: '1rem 0' }}>
+              <MessageBar messageBarType={MessageBarType.error}>
+                <div>Error in api call: <br /><span className={styles.error}>{apiError.body}</span></div>
+              </MessageBar>
+            </Stack>}
+      {!apiError && <>
+        <RequestResults data={graphData as GraphResult}
           dataFromDynamicSource={props.dataFromDynamicSource}
           labels={{ apiRequestResults: strings.GraphConnector.ShowGraphResultsLabel, dynamicDataResults: strings.DataSource.ShowDynamicDataLabel }} />
       </>}
