@@ -1,7 +1,7 @@
 import * as React from "react";
 import GraphConnector from './components/GraphConnector';
 import { IGraphConnectorProps } from "./components/IGraphConnectorProps";
-import { ApiSelector, GraphResult, GraphError } from "./models/types";
+import { ApiSelector, GraphResult, GraphError, SharePointResult, SharePointError } from "./models/types";
 import { IGraphConnectorWebPartProps } from "./GraphConnectorWebPart";
 import { MSGraphClientV3, SPHttpClient } from '@microsoft/sp-http';
 import SharePointConnector from "./components/SharePointConnector";
@@ -13,7 +13,7 @@ interface IApiConnectorFactory {
   dataSourceValues: undefined;
   graphClient: MSGraphClientV3;
   sharePointClient: SPHttpClient;
-  onDataResult: (data: GraphResult | GraphError) => void;
+  onDataResult: (data: GraphResult | GraphError | SharePointResult | SharePointError) => void;
 }
 
 // create a new factory class to create a new instance of React.ReactElement
