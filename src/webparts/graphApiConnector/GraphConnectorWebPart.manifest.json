@@ -23,9 +23,16 @@
       "description": { "default": "Graph API Connection description" },
       "officeFabricIconFontName": "PlugConnected",
       "properties": {
-        "api": "/me",
-        "version": "v1.0",
-        "sourceSelector": "none"
+        "sourceSelector": "none",
+        "apiSelector": "graphApi",
+        "graph": {
+          "api": "/me",
+          "version": "v1.0"
+        },
+        "sharePoint": {
+          "api": "/sites",
+          "version": "v1.0"
+        }       
       }
     }
   ]
