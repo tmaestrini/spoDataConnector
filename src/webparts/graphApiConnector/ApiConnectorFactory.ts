@@ -13,7 +13,8 @@ interface IApiConnectorFactory {
   dataSourceValues: undefined;
   graphClient: MSGraphClientV3;
   sharePointClient: SPHttpClient;
-  onDataResult: (data: GraphResult | GraphError | SharePointResult | SharePointError) => void;
+  onDataResult: (data: GraphResult | SharePointResult) => void;
+  onDataError: (data: GraphError | SharePointError) => void;
 }
 
 // create a new factory class to create a new instance of React.ReactElement
@@ -21,10 +22,10 @@ export class ApiConnectorFactory {
 
   public static createConnector(apiSelector: ApiSelector,
     data: IApiConnectorFactory): React.ReactElement<IGraphConnectorProps | ISharePointConnectorProps> {
-    const { properties, dataSourceValues, graphClient, sharePointClient, onDataResult } = data;
+    const { properties, dataSourceValues, graphClient, sharePointClient, onDataResult, onDataError } = data;
 
     function createGraphConnectorElement(): React.ReactElement<IGraphConnectorProps> {
-      const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
+      const element: React.ReactElement<IGraphConnectorProps> = React.createElement<IGraphConnectorProps>(
         GraphConnector,
         {
           dataFromDynamicSource: dataSourceValues,
@@ -36,6 +37,7 @@ export class ApiConnectorFactory {
           graphClient: graphClient,
 
           onGraphDataResult: onDataResult,
+          onGraphDataError: onDataError,
         }
       );
       return element;
@@ -54,6 +56,7 @@ export class ApiConnectorFactory {
           sharePointClient: sharePointClient,
 
           onSharePointDataResult: onDataResult,
+          onSharePointDataError: onDataError,
         }
       );
       return element;

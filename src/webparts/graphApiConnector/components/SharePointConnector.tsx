@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './GraphConnector.module.scss';
-import { GraphError, GraphResult, SharePointError, SharePointResult } from '../models/types';
+import { IRequestResult, SharePointError, SharePointResult } from '../models/types';
 import * as Handlebars from 'handlebars';
 import { Icon, MessageBar, MessageBarType, Stack } from '@fluentui/react';
 import { SPHttpClient } from '@microsoft/sp-http';
@@ -9,8 +9,8 @@ import RequestResults from '../../../common/components/RequestResults';
 import { ISharePointConnectorProps } from './ISharePointConnectorProps';
 
 const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = (props) => {
-  const [spoData, setSpoData] = React.useState<GraphResult>({} as GraphResult);
-  const [apiError, setApiError] = React.useState<GraphError | undefined>(undefined);
+  const [spoData, setSpoData] = React.useState<IRequestResult>({} as SharePointResult);
+  const [apiError, setApiError] = React.useState<SharePointError | undefined>(undefined);
   const [apiCall, setApiCall] = React.useState<string>();
 
   React.useEffect(() => {
@@ -46,12 +46,12 @@ const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = 
       if (!response.ok) throw new Error(response.statusText);
       const data = (await response.json());
 
-      setSpoData({ type: 'result', value: { ...data } } as SharePointResult);
-      if (props.onSharePointDataResult) props.onSharePointDataResult({ type: 'result', value: { ...data } } as SharePointResult);
+      setSpoData({ value: { ...data } } as SharePointResult);
+      if (props.onSharePointDataResult) props.onSharePointDataResult({ value: { ...data } } as SharePointResult);
     } catch (error) {
       setSpoData({} as SharePointResult);
-      setApiError({ ...error, type: 'error' } as SharePointError);
-      if (props.onSharePointDataResult) props.onSharePointDataResult({ ...error, type: 'error' } as SharePointError);
+      setApiError({ ...error } as SharePointError);
+      if (props.onSharePointDataError) props.onSharePointDataError({ ...error } as SharePointError);
     }
   }
 
@@ -67,8 +67,8 @@ const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = 
         </Stack>}
 
 
-      {spoData.type === 'result' && <>
-        <RequestResults data={spoData}
+      {!apiError && <>
+        <RequestResults data={spoData as SharePointResult}
           dataFromDynamicSource={props.dataFromDynamicSource}
           labels={{ apiRequestResults: strings.SharePointConnector.ShowSPOResultsLabel, dynamicDataResults: strings.DataSource.ShowDynamicDataLabel }} />
       </>}

@@ -1,10 +1,19 @@
-export type GraphResult<T = never> = {
-  type: 'result',
+export enum IRequestResultType {
+  Graph = 'Graph',
+  SharePoint = 'SharePoint'
+}
+
+export interface IRequestResult {
+  type: IRequestResultType;
+}
+
+export type GraphResult<T = never> = IRequestResult & {
+  type: IRequestResultType.Graph,
   value: T,
 }
 
-export type GraphError = {
-  type: 'error',
+export interface GraphError {
+  type: IRequestResultType.Graph,
   statusCode: number,
   code: string,
   requestId: string,
@@ -12,13 +21,13 @@ export type GraphError = {
   body: string,
 }
 
-export type SharePointResult<T = never> = {
-  type: 'result',
+export type SharePointResult<T = never> = IRequestResult & {
+  type: IRequestResultType.SharePoint,
   value: T,
 }
 
-export type SharePointError = {
-  type: 'error',
+export interface SharePointError {
+  type: IRequestResultType.SharePoint,
   statusCode: number,
   code: string,
   requestId: string,
@@ -30,3 +39,4 @@ export enum ApiSelector {
   Graph = 'graphApi',
   SharePoint = 'sharePointApi'
 }
+

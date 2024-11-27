@@ -16,15 +16,14 @@ import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp
 import { DynamicProperty, IReadonlyTheme } from '@microsoft/sp-component-base';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
 import * as strings from 'GraphConnectorWebPartStrings';
-import GraphConnector from './components/GraphConnector';
-import { IGraphConnectorProps } from './components/IGraphConnectorProps';
-import { GraphError, GraphResult } from './models/types';
+import { ApiSelector, GraphError, GraphResult, SharePointError, SharePointResult } from './models/types';
+import { ApiConnectorFactory} from './ApiConnectorFactory';
 
 
 export interface IGraphConnectorWebPartProps {
   sourceSelector: 'none' | 'dynamicData';
   dataSource?: DynamicProperty<undefined>;
-  apiSelector: 'graphApi' | 'sharePointApi';
+  apiSelector: ApiSelector;
 
   graph: {
     api: string;
@@ -52,29 +51,29 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
   public render(): void {
     this.tryFetchDataSourceValues();
 
-    const element: React.ReactElement<IGraphConnectorProps> = React.createElement(
-      GraphConnector,
-      {
-        dataFromDynamicSource: this.dataSourceValues,
-        api: this.properties.graph?.api,
-        version: this.properties.graph?.version,
-        filter: this.properties.graph?.filter,
-        select: this.properties.graph?.select,
-        expand: this.properties.graph?.expand,
-        graphClient: this.graphClient,
+    const element: React.ReactElement = ApiConnectorFactory.createConnector(this.properties.apiSelector, {
+      properties: this.properties,
+      dataSourceValues: this.dataSourceValues,
+      graphClient: this.graphClient,
+      sharePointClient: this.context.spHttpClient,
 
-        onGraphDataResult: (data: GraphResult | GraphError) => {
-          if (data.type === 'result') {
-            delete (data as { type?: string }).type; // delete type property for better readability
-            this.graphData = data as GraphResult;
-          } else {
-            console.error(data);
-          }
+      onDataResult: (data: GraphResult | SharePointResult ) => {
+        console.log('Data result:', data);
+      },
+      onDataError: (data: GraphError | SharePointError): data is GraphError | SharePointError => {
+        // TODO: handle SharePoint data (move everything to a new method)
+        console.log('Data error:', data);
+        return true;
+        // if (data.type === 'result') {
+        //   delete (data as { type?: string }).type; // delete type property for better readability
+        //   this.graphData = data as GraphResult;
+        // } else {
+        //   console.error(data);
+        // }
 
-          this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
-        },
-      }
-    );
+        // this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
+      },
+    });
 
     ReactDom.render(element, this.domElement);
   }
@@ -88,6 +87,10 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
   }
 
   protected async onInit(): Promise<void> {
+    // Set default values
+    if(!this.properties.sharePoint.api) this.properties.sharePoint.api = `${this.context.pageContext.web.absoluteUrl}/_api/web/lists`;
+    
+    // Initialize necessary services
     this.graphClient = await this.context.msGraphClientFactory.getClient('3');
     this.context.dynamicDataSourceManager.initializeSource(this);
     return Promise.resolve();
@@ -154,7 +157,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.PropertyPaneDescription,
           },
           groups: [
             {
@@ -183,14 +186,14 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
                 PropertyPaneDropdown('apiSelector', {
                   label: strings.DataSource.ApiSelectorLabel,
                   options: [
-                    { key: 'graphApi', text: 'Call a Microsoft Graph API' },
-                    { key: 'sharePointApi', text: 'Call a SharePoint API' },
+                    { key: ApiSelector.Graph, text: 'Call a Microsoft Graph API' },
+                    { key: ApiSelector.SharePoint, text: 'Call a SharePoint API' },
                   ],
                 }),
               ],
             },
-            ...(this.properties.apiSelector === 'graphApi' ? [this.graphPropertyPaneGroup] : []),
-            ...(this.properties.apiSelector === 'sharePointApi' ? [this.sharePointPropertyPaneGroup] : []),
+            ...(this.properties.apiSelector === ApiSelector.Graph ? [this.graphPropertyPaneGroup] : []),
+            ...(this.properties.apiSelector === ApiSelector.SharePoint ? [this.sharePointPropertyPaneGroup] : []),
           ],
         },
       ],
@@ -257,16 +260,16 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         }),
         PropertyPaneTextField('sharePoint.api', {
           label: `${strings.SharePointAPI.ApiLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
-          placeholder: `/site, /web, /lists, /lists/getbytitle('listname')`,
-          description: `https://{site}.sharepoint.com/_api${this.properties.sharePoint?.api}`,
+          placeholder: `https://{site}.sharepoint.com/_api/site, https://{site}.sharepoint.com/_api/lists/getbytitle('listname')`,
+          description: `${this.properties.sharePoint?.api}`,
           multiline: true,
-
+          rows: 4,
         }),
         PropertyPaneTextField('sharePoint.filter', {
           label: `${strings.SharePointAPI.FilterLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
-          placeholder: `substringof('Alfred', Title) eq true`,
+          placeholder: `Title eq 'Alfred'`,
           multiline: true,
-          description: `See reference: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/use-odata-query-operations-in-sharepoint-rest-requests#select-items-to-return`,
+          description: `Also see reference: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/use-odata-query-operations-in-sharepoint-rest-requests#select-items-to-return`,
         }),
         PropertyPaneTextField('sharePoint.select', {
           label: strings.SharePointAPI.SelectLabel,
