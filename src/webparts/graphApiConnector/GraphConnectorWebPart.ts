@@ -69,8 +69,8 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
       },
       onResponseError: (data: GraphError | SharePointError) => {
-        // console.log('Data error', data);
-        delete this.graphData.result;
+        console.log('Data error', data);
+        if(this.graphData.result) delete this.graphData.result;
         this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
       },
     });
