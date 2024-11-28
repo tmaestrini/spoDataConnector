@@ -13,6 +13,6 @@ export interface IGraphConnectorProps<T = never> {
   graphClient: MSGraphClientV3;
 
   // Callbacks
-  onGraphDataResult?(data: GraphResult): void;
-  onGraphDataError?(error: GraphError): void;
+  onResponseResult?(data: GraphResult): void;
+  onResponseError?(error: GraphError): void;
 }
