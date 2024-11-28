@@ -42,7 +42,7 @@ export interface IGraphConnectorWebPartProps {
   }
 }
 
-export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> implements IDynamicDataCallables {
+export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> implements IDynamicDataCallables {
 
   private graphClient: MSGraphClientV3;
   private graphData: IRequestResult;

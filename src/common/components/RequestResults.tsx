@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MessageBar, MessageBarType, Stack } from '@fluentui/react';
 import CollapsibleSection from './CollapsibleSection';
-import { GraphResult, SharePointResult } from '../../webparts/graphApiConnector/models/types';
+import { GraphResult, SharePointResult } from '../../webparts/apiConnector/models/types';
 
 type ResultsSectionProps = {
   data: GraphResult | SharePointResult;

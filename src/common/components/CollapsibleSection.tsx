@@ -1,6 +1,6 @@
 import { prettyPrintJson } from "pretty-print-json";
 import * as React from "react";
-import styles from "../../webparts/graphApiConnector/components/GraphConnector.module.scss";
+import styles from "../../webparts/apiConnector/components/GraphConnector.module.scss";
 
 type CollapsibleSectionProps = {
   label: string;

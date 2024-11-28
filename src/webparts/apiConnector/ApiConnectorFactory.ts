@@ -2,8 +2,8 @@ import * as React from "react";
 import GraphConnector from './components/GraphConnector';
 import { IGraphConnectorProps } from "./components/IGraphConnectorProps";
 import { ApiSelector, GraphResult, GraphError, SharePointResult, SharePointError } from "./models/types";
-import { IGraphConnectorWebPartProps } from "./GraphConnectorWebPart";
 import { MSGraphClientV3, SPHttpClient } from '@microsoft/sp-http';
+import { IGraphConnectorWebPartProps } from "./ApiConnectorWebPart";
 import SharePointConnector from "./components/SharePointConnector";
 import { ISharePointConnectorProps } from "./components/ISharePointConnectorProps";
 
