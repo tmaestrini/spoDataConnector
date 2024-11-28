@@ -21,7 +21,7 @@ define([], function () {
       ExpandLabel: "Expand ($expand attribute)",
     },
     GraphConnector: {
-      ShowGraphResultsLabel: "Show result(s) from Graph API",
+      ShowGraphResultsLabel: "Show result from Graph API",
     },
     SharePointAPI: {
       BasicGroupName: "SharePoint API request",
@@ -34,7 +34,7 @@ define([], function () {
       ExpandLabel: "Expand ($expand attribute)",
     },
     SharePointConnector: {
-      ShowSPOResultsLabel: "Show result(s) from SharePoint API",
+      ShowSPOResultsLabel: "Show result from SharePoint API",
     },
     AppLocalEnvironmentSharePoint: "The app is running on your local environment as SharePoint web part",
     AppLocalEnvironmentTeams: "The app is running on your local environment as Microsoft Teams app",
