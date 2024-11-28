@@ -18,13 +18,13 @@ export default function RequestResults(props: ResultsSectionProps): JSX.Element 
     <>
       <Stack tokens={{ childrenGap: 1 }} style={{ margin: '1rem 0' }}>
         <MessageBar messageBarType={MessageBarType.success}>
-          <div>👉 {data.value?.['@odata.count'] && <code>{JSON.stringify((data.value)['@odata.count'])}</code>} valid record(s) found.</div>
+          <div>👉 {data.result?.['@odata.count'] && <code>{JSON.stringify((data.result)['@odata.count'])}</code>} valid record(s) found.</div>
           <div>Reference <code>value</code> property in connected webparts for results</div>
         </MessageBar>
       </Stack>
 
       <Stack tokens={{ childrenGap: 10 }}>
-        <CollapsibleSection label={labels.apiRequestResults} value={data.value} />
+        <CollapsibleSection label={labels.apiRequestResults} value={data.result} />
         {dataFromDynamicSource && <CollapsibleSection label={labels.dynamicDataResults} value={dataFromDynamicSource ?? ''} />}
       </Stack>
     </>

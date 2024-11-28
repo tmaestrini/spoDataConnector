@@ -4,15 +4,15 @@ export enum IRequestResultType {
 }
 
 export interface IRequestResult {
-  type: IRequestResultType;
+  type?: IRequestResultType;
 }
 
 export type GraphResult<T = never> = IRequestResult & {
   type: IRequestResultType.Graph,
-  value: T,
+  result: T,
 }
 
-export interface GraphError {
+export type GraphError = IRequestResult & {
   type: IRequestResultType.Graph,
   statusCode: number,
   code: string,
@@ -23,10 +23,10 @@ export interface GraphError {
 
 export type SharePointResult<T = never> = IRequestResult & {
   type: IRequestResultType.SharePoint,
-  value: T,
+  result: T,
 }
 
-export interface SharePointError {
+export type SharePointError = IRequestResult & {
   type: IRequestResultType.SharePoint,
   statusCode: number,
   code: string,
