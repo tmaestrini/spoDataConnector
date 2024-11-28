@@ -16,8 +16,8 @@ import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp
 import { DynamicProperty, IReadonlyTheme } from '@microsoft/sp-component-base';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
 import * as strings from 'GraphConnectorWebPartStrings';
-import { ApiSelector, GraphError, GraphResult, SharePointError, SharePointResult } from './models/types';
-import { ApiConnectorFactory} from './ApiConnectorFactory';
+import { ApiSelector, GraphError, GraphResult, IRequestResult, IRequestResultType, SharePointError, SharePointResult } from './models/types';
+import { ApiConnectorFactory } from './ApiConnectorFactory';
 
 
 export interface IGraphConnectorWebPartProps {
@@ -45,7 +45,7 @@ export interface IGraphConnectorWebPartProps {
 export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> implements IDynamicDataCallables {
 
   private graphClient: MSGraphClientV3;
-  private graphData: GraphResult;
+  private graphData: IRequestResult;
   private dataSourceValues: undefined;
 
   public render(): void {
@@ -57,21 +57,23 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       graphClient: this.graphClient,
       sharePointClient: this.context.spHttpClient,
 
-      onDataResult: (data: GraphResult | SharePointResult ) => {
-        console.log('Data result:', data);
-      },
-      onDataError: (data: GraphError | SharePointError): data is GraphError | SharePointError => {
-        // TODO: handle SharePoint data (move everything to a new method)
-        console.log('Data error:', data);
-        return true;
-        // if (data.type === 'result') {
-        //   delete (data as { type?: string }).type; // delete type property for better readability
-        //   this.graphData = data as GraphResult;
-        // } else {
-        //   console.error(data);
-        // }
+      onDataResult: (data: GraphResult | SharePointResult) => {
+        console.log('Data result', data);
 
-        // this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
+        if (data.type === IRequestResultType.Graph) {
+          this.graphData = (data as GraphResult).result;
+        } else if (data.type === IRequestResultType.SharePoint) {
+          this.graphData = (data as SharePointResult).result;
+        }
+
+        delete this.graphData.type; // delete type property for better readability
+        this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
+      },
+      onDataError: (data: GraphError | SharePointError) => {
+        // TODO: handle SharePoint data (move everything to a new method)
+        console.log('Data error', data);
+        delete this.graphData.result;
+        this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
       },
     });
 
@@ -88,8 +90,8 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
 
   protected async onInit(): Promise<void> {
     // Set default values
-    if(!this.properties.sharePoint.api) this.properties.sharePoint.api = `${this.context.pageContext.web.absoluteUrl}/_api/web/lists`;
-    
+    if (!this.properties.sharePoint.api) this.properties.sharePoint.api = `${this.context.pageContext.web.absoluteUrl}/_api/web/lists`;
+
     // Initialize necessary services
     this.graphClient = await this.context.msGraphClientFactory.getClient('3');
     this.context.dynamicDataSourceManager.initializeSource(this);
@@ -102,7 +104,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
     ]
   }
 
-  public getPropertyValue(propertyId: string): GraphResult {
+  public getPropertyValue(propertyId: string): IRequestResult {
     if (propertyId === 'graphData') return this.graphData;
     throw new Error(`property '${propertyId}' not found`);
   }
