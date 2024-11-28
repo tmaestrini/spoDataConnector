@@ -5,6 +5,7 @@ export enum IRequestResultType {
 
 export interface IRequestResult {
   type?: IRequestResultType;
+  result: never;
 }
 
 export type GraphResult<T = never> = IRequestResult & {
