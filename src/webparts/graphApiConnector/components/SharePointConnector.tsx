@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './GraphConnector.module.scss';
-import { IRequestResult, SharePointError, SharePointResult } from '../models/types';
+import { IRequestResultType, SharePointError, SharePointResult } from '../models/types';
 import * as Handlebars from 'handlebars';
 import { Icon, MessageBar, MessageBarType, Stack } from '@fluentui/react';
 import { SPHttpClient } from '@microsoft/sp-http';
@@ -9,33 +9,32 @@ import RequestResults from '../../../common/components/RequestResults';
 import { ISharePointConnectorProps } from './ISharePointConnectorProps';
 
 const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = (props) => {
-  const [spoData, setSpoData] = React.useState<IRequestResult>({} as SharePointResult);
-  const [apiError, setApiError] = React.useState<SharePointError | undefined>(undefined);
+  const [spoData, setSpoData] = React.useState<SharePointResult>({ type: IRequestResultType.SharePoint } as SharePointResult);
+  const [apiError, setApiError] = React.useState<SharePointError | undefined>({ type: IRequestResultType.SharePoint } as SharePointError);
   const [apiCall, setApiCall] = React.useState<string>();
 
   React.useEffect(() => {
     setApiError(undefined);
-    loadDataFromGraph()
+    loadSharePointResults()
       .catch((e) => {
         console.error(e);
         setApiError(e.message);
       });
   }, [props]);
 
-  async function loadDataFromGraph(): Promise<void> {
+  async function loadSharePointResults(): Promise<void> {
     function tryIngestDynamicData(template: string): string {
       if (!props.dataFromDynamicSource) return template;
       return Handlebars.compile(template)(props.dataFromDynamicSource);
     }
-
-    const path = tryIngestDynamicData(props.api);
 
     const spoQueryParams = new URLSearchParams();
     if (props.select) spoQueryParams.append('$select', props.select);
     if (props.expand) spoQueryParams.append('$expand', props.expand);
     if (props.filter) spoQueryParams.append('$filter', tryIngestDynamicData(props.filter));
 
-    const spoQuery = new URL(path);
+    // Build the query upon dynamic data and the query parameters
+    const spoQuery = new URL(tryIngestDynamicData(props.api));
     if (props.version && props.version === 'v2.0') spoQuery.pathname = `/v2.0${spoQuery.pathname}`;
     spoQuery.search = spoQueryParams.toString();
 
@@ -46,12 +45,11 @@ const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = 
       if (!response.ok) throw new Error(response.statusText);
       const data = (await response.json());
 
-      setSpoData({ value: { ...data } } as SharePointResult);
-      if (props.onSharePointDataResult) props.onSharePointDataResult({ value: { ...data } } as SharePointResult);
+      setSpoData({ ...spoData, result: { ...data } } as SharePointResult);
+      if (props.onSharePointDataResult) props.onSharePointDataResult({ ...spoData, result: { ...data } } as SharePointResult);
     } catch (error) {
-      setSpoData({} as SharePointResult);
-      setApiError({ ...error } as SharePointError);
-      if (props.onSharePointDataError) props.onSharePointDataError({ ...error } as SharePointError);
+      setApiError({ ...apiError, ...error });
+      if (props.onSharePointDataError) props.onSharePointDataError({ ...apiError, ...error });
     }
   }
 
@@ -70,7 +68,11 @@ const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = 
       {!apiError && <>
         <RequestResults data={spoData as SharePointResult}
           dataFromDynamicSource={props.dataFromDynamicSource}
-          labels={{ apiRequestResults: strings.SharePointConnector.ShowSPOResultsLabel, dynamicDataResults: strings.DataSource.ShowDynamicDataLabel }} />
+          labels={{
+            apiRequestResults: strings.SharePointConnector.ShowSPOResultsLabel,
+            dynamicDataResults: strings.DataSource.ShowDynamicDataLabel,
+            referencePropertyInfo: strings.SharePointConnector.referencePropertyInfo
+          }} />
       </>}
     </div>
   );
