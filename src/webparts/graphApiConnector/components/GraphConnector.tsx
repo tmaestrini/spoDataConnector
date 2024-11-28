@@ -42,10 +42,10 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       const data = await graphQuery.get();
 
       setGraphData({ ...graphData, result: { ...data } } as GraphResult);
-      if (props.onGraphDataResult) props.onGraphDataResult({ ...graphData, result: { ...data } } as GraphResult);
+      if (props.onResponseResult) props.onResponseResult({ ...graphData, result: { ...data } } as GraphResult);
     } catch (error) {
       setApiError({...apiError, ...error } as GraphError);
-      if (props.onGraphDataError) props.onGraphDataError({ ...apiError, ...error } as GraphError);
+      if (props.onResponseError) props.onResponseError({ ...apiError, ...error } as GraphError);
     }
   }
 

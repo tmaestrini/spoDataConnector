@@ -57,7 +57,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
       graphClient: this.graphClient,
       sharePointClient: this.context.spHttpClient,
 
-      onDataResult: (data: GraphResult | SharePointResult) => {
+      onResponseResult: (data: GraphResult | SharePointResult) => {
         console.log('Data result', data);
 
         if (data.type === IRequestResultType.Graph) {
@@ -69,7 +69,7 @@ export default class GraphConnectorWebPart extends BaseClientSideWebPart<IGraphC
         delete this.graphData.type; // delete type property for better readability
         this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
       },
-      onDataError: (data: GraphError | SharePointError) => {
+      onResponseError: (data: GraphError | SharePointError) => {
         // TODO: handle SharePoint data (move everything to a new method)
         console.log('Data error', data);
         delete this.graphData.result;

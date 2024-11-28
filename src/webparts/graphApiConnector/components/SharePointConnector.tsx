@@ -46,10 +46,10 @@ const SharePointConnector: React.FunctionComponent<ISharePointConnectorProps> = 
       const data = (await response.json());
 
       setSpoData({ ...spoData, result: { ...data } } as SharePointResult);
-      if (props.onSharePointDataResult) props.onSharePointDataResult({ ...spoData, result: { ...data } } as SharePointResult);
+      if (props.onResponseResult) props.onResponseResult({ ...spoData, result: { ...data } } as SharePointResult);
     } catch (error) {
       setApiError({ ...apiError, ...error });
-      if (props.onSharePointDataError) props.onSharePointDataError({ ...apiError, ...error });
+      if (props.onResponseError) props.onResponseError({ ...apiError, ...error });
     }
   }
 

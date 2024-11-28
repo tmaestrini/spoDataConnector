@@ -13,6 +13,6 @@ export interface ISharePointConnectorProps<T = never> {
   sharePointClient: SPHttpClient;
 
   // Callbacks
-  onSharePointDataResult?(data: SharePointResult): void;
-  onSharePointDataError?(error: SharePointError): void;
+  onResponseResult?(data: SharePointResult): void;
+  onResponseError?(error: SharePointError): void;
 }
