@@ -19,6 +19,7 @@ declare interface IGraphConnectorWebPartStrings {
   };
   GraphConnector: {
     ShowGraphResultsLabel: string;
+    referencePropertyInfo?: string;
   };
   SharePointAPI: {
     BasicGroupName: string;
@@ -31,6 +32,7 @@ declare interface IGraphConnectorWebPartStrings {
   };
   SharePointConnector: {
     ShowSPOResultsLabel: string;
+    referencePropertyInfo?: string;
   };
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;

@@ -22,6 +22,7 @@ define([], function () {
     },
     GraphConnector: {
       ShowGraphResultsLabel: "Show result from Graph API",
+      referencePropertyInfo: "👉 Reference the <code>value</code> property in connected webparts when processing a result set with multiple entries."
     },
     SharePointAPI: {
       BasicGroupName: "SharePoint API request",
@@ -35,6 +36,7 @@ define([], function () {
     },
     SharePointConnector: {
       ShowSPOResultsLabel: "Show result from SharePoint API",
+      referencePropertyInfo: "👉 Reference the <code>value</code> property in connected webparts when processing a result set with multiple entries."
     },
     AppLocalEnvironmentSharePoint: "The app is running on your local environment as SharePoint web part",
     AppLocalEnvironmentTeams: "The app is running on your local environment as Microsoft Teams app",

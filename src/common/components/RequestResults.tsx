@@ -7,6 +7,7 @@ type ResultsSectionProps = {
   data: GraphResult | SharePointResult;
   dataFromDynamicSource?: never;
   labels: {
+    referencePropertyInfo?: string;
     apiRequestResults: string;
     dynamicDataResults: string;
   }
@@ -18,8 +19,8 @@ export default function RequestResults(props: ResultsSectionProps): JSX.Element 
     <>
       <Stack tokens={{ childrenGap: 1 }} style={{ margin: '1rem 0' }}>
         <MessageBar messageBarType={MessageBarType.success}>
-          <div>👉 {data.result?.['@odata.count'] && <code>{JSON.stringify((data.result)['@odata.count'])}</code>} valid record(s) found.</div>
-          <div>Reference <code>value</code> property in connected webparts for results</div>
+          <div>{data.result?.['@odata.count'] && <code>{JSON.stringify((data.result)['@odata.count'])}</code>} valid record(s) found.</div>
+          {labels.referencePropertyInfo && <div dangerouslySetInnerHTML={{ __html: labels.referencePropertyInfo }} />}
         </MessageBar>
       </Stack>
 

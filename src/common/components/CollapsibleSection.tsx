@@ -9,14 +9,16 @@ type CollapsibleSectionProps = {
 
 export default function CollapsibleSection(props: CollapsibleSectionProps): JSX.Element {
   const { label, value } = props;
+
   return (
-    <details>
-      <summary>
-        {label}
-      </summary>
-      <div className={styles.breakContent}>
-        <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(value) }} />
-      </div>
-    </details>
+    value ?
+      <details>
+        <summary>
+          {label}
+        </summary>
+        <div className={styles.breakContent}>
+          <pre dangerouslySetInnerHTML={{ __html: prettyPrintJson.toHtml(value) }} />
+        </div>
+      </details> : <></>
   );
 }

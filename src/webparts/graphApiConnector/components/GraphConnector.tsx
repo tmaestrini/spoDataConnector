@@ -62,7 +62,9 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       {!apiError && <>
         <RequestResults data={graphData as GraphResult}
           dataFromDynamicSource={props.dataFromDynamicSource}
-          labels={{ apiRequestResults: strings.GraphConnector.ShowGraphResultsLabel, dynamicDataResults: strings.DataSource.ShowDynamicDataLabel }} />
+          labels={{ apiRequestResults: strings.GraphConnector.ShowGraphResultsLabel, 
+          dynamicDataResults: strings.DataSource.ShowDynamicDataLabel,
+          referencePropertyInfo: strings.GraphConnector.referencePropertyInfo}} />
       </>}
     </div>
   );
