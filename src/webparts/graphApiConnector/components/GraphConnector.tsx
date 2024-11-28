@@ -9,7 +9,7 @@ import RequestResults from '../../../common/components/RequestResults';
 
 const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) => {
   const [graphData, setGraphData] = React.useState<GraphResult>({ type: IRequestResultType.Graph, result: undefined } as GraphResult);
-  const [apiError, setApiError] = React.useState<GraphError | undefined>(undefined);
+  const [apiError, setApiError] = React.useState<GraphError | undefined>({type: IRequestResultType.Graph} as GraphError);
   const [apiCall, setApiCall] = React.useState<string>();
 
   React.useEffect(() => {
@@ -44,9 +44,8 @@ const GraphConnector: React.FunctionComponent<IGraphConnectorProps> = (props) =>
       setGraphData({ ...graphData, result: { ...data } } as GraphResult);
       if (props.onGraphDataResult) props.onGraphDataResult({ ...graphData, result: { ...data } } as GraphResult);
     } catch (error) {
-      setGraphData({} as GraphResult);
-      setApiError({ ...error } as GraphError);
-      if (props.onGraphDataError) props.onGraphDataError({ type: IRequestResultType.Graph, ...error } as GraphError);
+      setApiError({...apiError, ...error } as GraphError);
+      if (props.onGraphDataError) props.onGraphDataError({ ...apiError, ...error } as GraphError);
     }
   }
 
