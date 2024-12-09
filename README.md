@@ -1,4 +1,4 @@
-# tmaestrini-spo-test
+# tmaestrini-spo-data-connector
 
 ## Summary
 
@@ -23,16 +23,17 @@ Short summary on functionality and used technologies.
 
 ## Solution
 
-| Solution    | Author(s)                                               |
-| ----------- | ------------------------------------------------------- |
-| folder name | Author details (name, company, twitter alias with link) |
+| Solution | Author(s)                                 |
+| -------- | ----------------------------------------- |
+| 1.0.0    | Tobias Maestrini, @tmaestrini.bsky.social |
 
 ## Version history
 
-| Version | Date             | Comments        |
-| ------- | ---------------- | --------------- |
-| 1.1     | March 10, 2021   | Update comment  |
-| 1.0     | January 29, 2021 | Initial release |
+| Version | Date         | Comments                                                  |
+| ------- | ------------ | --------------------------------------------------------- |
+| 1.2     | Dec 09, 2024 | improve data handling and add webpart information display |
+| 1.1     | Nov 28, 2024 | add SPO api data connector                                |
+| 1.0     | Nov 25, 2024 | Initial release                                           |
 
 ## Disclaimer
 
@@ -49,6 +50,9 @@ Short summary on functionality and used technologies.
   - **gulp serve**
 
 > Include any additional steps as needed.
+
+> [!NOTE]
+> Instead of running `gulp serve`, you can install _fast-serve_ and run it via `npm run serve`.
 
 ## Features
 
