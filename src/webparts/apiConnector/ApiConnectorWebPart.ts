@@ -45,13 +45,13 @@ export interface IGraphConnectorWebPartProps {
 export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphConnectorWebPartProps> implements IDynamicDataCallables {
 
   private graphClient: MSGraphClientV3;
-  private graphData: IRequestResult;
+  private connectorData: IRequestResult;
   private dataSourceValues: undefined;
 
   public render(): void {
     this.tryFetchDataSourceValues();
 
-    const element: React.ReactElement = ApiConnectorFactory.createConnector(this.properties.apiSelector, {
+    const element: React.ReactElement = ApiConnectorFactory.createConnector(this.properties?.apiSelector, {
       properties: this.properties,
       dataSourceValues: this.dataSourceValues,
       graphClient: this.graphClient,
@@ -60,18 +60,18 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
       onResponseResult: (data: GraphResult | SharePointResult) => {
         // console.log('Data result', data);
         if (data.type === IRequestResultType.Graph) {
-          this.graphData = (data as GraphResult).result;
+          this.connectorData = (data as GraphResult).result;
         } else if (data.type === IRequestResultType.SharePoint) {
-          this.graphData = (data as SharePointResult).result;
+          this.connectorData = (data as SharePointResult).result;
         }
 
-        delete this.graphData.type; // delete type property for better readability
-        this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
+        delete this.connectorData.type; // delete type property for better readability
+        this.context.dynamicDataSourceManager.notifyPropertyChanged('connectorData');
       },
       onResponseError: (data: GraphError | SharePointError) => {
         console.log('Data error', data);
-        if(this.graphData.result) delete this.graphData.result;
-        this.context.dynamicDataSourceManager.notifyPropertyChanged('graphData');
+        if (this.connectorData.result) delete this.connectorData.result;
+        this.context.dynamicDataSourceManager.notifyPropertyChanged('connectorData');
       },
     });
 
@@ -98,12 +98,12 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
 
   public getPropertyDefinitions(): ReadonlyArray<IDynamicDataPropertyDefinition> {
     return [
-      { id: 'graphData', title: 'Graph Data result' },
+      { id: 'connectorData', title: `Data result (${this.context.instanceId})` },
     ]
   }
 
   public getPropertyValue(propertyId: string): IRequestResult {
-    if (propertyId === 'graphData') return this.graphData;
+    if (propertyId === 'connectorData') return this.connectorData;
     throw new Error(`property '${propertyId}' not found`);
   }
 
@@ -196,6 +196,34 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
             ...(this.properties.apiSelector === ApiSelector.SharePoint ? [this.sharePointPropertyPaneGroup] : []),
           ],
         },
+        {
+          header: {
+            description: "Information / Reference",
+          },
+          groups: [
+            {
+              groupName: "Webpart Infos",
+              groupFields: [
+                PropertyPaneLabel('webpartId', {
+                  text: 'Webpart Id',
+                }),
+                PropertyPaneTextField('webPartIdValue', {
+                  value: this.context.instanceId,
+                  description: 'Id of this webpart to use in dynamic data source',
+                  disabled: true,
+                }),
+                PropertyPaneLabel('webpartVersion', {
+                  text: 'Version',
+                }),
+                PropertyPaneTextField('webpartVersionValue', {
+                  value: this.context.manifest.version,
+                  description: 'Current version of this webpart',
+                  disabled: true,
+                }),
+              ]
+            }
+          ],
+        }
       ],
     };
   }
