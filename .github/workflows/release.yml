@@ -1,0 +1,49 @@
+########################################################
+### Basic SharePoint Framework Build Pipeline (SPFx) ###
+########################################################
+
+name: "Basic SharePoint Framework Build Pipeline (SPFx)"
+
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  spfx-build:
+    name: 'SPFx Build solution'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x
+    
+      - name: Install npm
+        run: npm ci
+
+      - name: Install Gulp (globally)
+        run: npm i -g gulp
+    
+      - name: build and create solution package (.sppkg)
+        run: |
+          gulp bundle --ship
+          gulp package-solution --ship
+
+      - name: Publish release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: 'release-${{ github.sha }}'
+          release_name: "${{ github.event.head_commit.timestamp | date('YYYY.MM.') }}${{ github.run_number }}"
+          body: 'Release of SPPKG files'
+          draft: false
+          prerelease: false
+          files: sharepoint/solution/*.sppkg
+      
