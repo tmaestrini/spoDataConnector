@@ -41,13 +41,18 @@ jobs:
           gulp bundle --ship
           gulp package-solution --ship
 
-      - name: Read Solution Version
+      - name: Set Solution parameters
         run: |
           SOLUTION_VERSION=$(jq -r '.solution.version' ./config/package-solution.json)
           echo "SOLUTION_VERSION=${SOLUTION_VERSION}" >> $GITHUB_ENV
 
-      - name: Set Release Name
-        run: echo "RELEASE_NAME=$(date +'%Y%m')${GITHUB_RUN_NUMBER}-${SOLUTION_VERSION}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$(date +'%Y%m')${GITHUB_RUN_NUMBER}-${SOLUTION_VERSION}" >> $GITHUB_ENV
+
+          SPPKG_PATH=$(find ./sharepoint/solution -name "*.sppkg" -type f)
+          echo "SPPKG_PATH=${SPPKG_PATH}" >> $GITHUB_ENV
+
+          SPPKG_FILENAME=$(basename ${SPPKG_PATH})
+          echo "SPPKG_FILENAME=${SPPKG_FILENAME}" >> $GITHUB_ENV
 
       - name: Set new Version Tag and Publish Release
         uses: actions/create-release@v1
@@ -62,11 +67,6 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Find SPPKG file
-        run: |
-          SPPKG_PATH=$(find ./sharepoint/solution -name "*.sppkg" -type f)
-          echo "SPPKG_PATH=${SPPKG_PATH}" >> $GITHUB_ENV
-
       - name: Upload release asset
         uses: actions/upload-release-asset@v1
         env:
@@ -74,5 +74,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ env.SPPKG_PATH }}
-          asset_name: solution.sppkg
+          asset_name: ${{ env.SPPKG_FILENAME }}
           asset_content_type: application/zip
