@@ -18,6 +18,12 @@ jobs:
     name: "SPFx Build solution"
     runs-on: ubuntu-latest
 
+    outputs:
+      solution_version: ${{ env.SOLUTION_VERSION }}
+      release_name: ${{ env.RELEASE_NAME }}
+      sppkg_path: ${{ env.SPPKG_PATH }}
+      sppkg_filename: ${{ env.SPPKG_FILENAME }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -54,15 +60,19 @@ jobs:
           SPPKG_FILENAME=$(basename ${SPPKG_PATH})
           echo "SPPKG_FILENAME=${SPPKG_FILENAME}" >> $GITHUB_ENV
 
+  release:
+    needs: spfx-build
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Set new Version Tag and Publish Release
         uses: actions/create-release@v1
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # tag_name: "${{ github.sha }}"
-          tag_name: "v${{ env.SOLUTION_VERSION }}"
-          release_name: ${{ env.RELEASE_NAME }}
+          tag_name: "v${{ needs.build.outputs.solution_version }}"
+          release_name: ${{ needs.build.outputs.release_name }}
           body: "Release ${{ env.SOLUTION_VERSION }}"
           draft: false
           prerelease: false
@@ -73,6 +83,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ env.SPPKG_PATH }}
-          asset_name: "${{ env.SPPKG_FILENAME }}-${{ env.SOLUTION_VERSION }}"
+          asset_path: ${{ needs.spfx-build.outputs.sppkg_filename }}
+          asset_name: "${{ needs.spfx-build.outputs.sppkg_filename }}-${{ needs.spfx-build.outputs.solution_version }}"
           asset_content_type: application/zip
