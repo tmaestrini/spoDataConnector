@@ -2,9 +2,16 @@
 
 ## Summary
 
-Short summary on functionality and used technologies.
+This SharePoint Framework (SPFx) web part integrates with following data APIs: Microsoft Graph and SharePoint. 
 
-[picture of the solution in action, if possible]
+It allows users to configure the appropriate API endpoints by defining the api version and query parameters through the property pane. The web part dynamically fetches data from the specified APIs and passes the result as so called "dynamic data" to connected webpart(s). 
+
+It also supports the definition of input parameters from dynamic data sources and therefore provides a dynamic and flexible way to connect and display data from various service endpoints (within Microsoft 365) on SharePoint pages.
+
+![screenshot of the webpart](./assets/summary.png)
+
+> [!NOTE]
+> The webpart (and its setup) are only visible in `Edit` mode of the SharePoint page.
 
 ## Used SharePoint Framework Version
 
@@ -19,13 +26,13 @@ Short summary on functionality and used technologies.
 
 ## Prerequisites
 
-> Any special pre-requisites?
+The Microsoft Graph requests made by this web part rely on appropriate Microsoft Graph permissions. Therefore, all desired permissions must be granted by a Global admin through this Entra ID app: `SharePoint Online Client Extensibility Web Application Principal`. This ensures that the web part can access the required data and perform the necessary operations using Microsoft Graph API.
 
 ## Solution
 
 | Solution | Author(s)                                 |
 | -------- | ----------------------------------------- |
-| 1.0.0    | Tobias Maestrini, @tmaestrini.bsky.social |
+| 1.0.0    | Tobias Maestrini, [@tmaestrini.bsky.social](https://bsky.app/profile/tmaestrini.bsky.social) |
 
 ## Version history
 
