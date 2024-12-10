@@ -35,13 +35,16 @@ jobs:
           gulp bundle --ship
           gulp package-solution --ship
 
+      - name: Set Release Name
+        run: echo "RELEASE_NAME=$(date +'%Y.%m').${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+
       - name: Publish release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: 'release-${{ github.sha }}'
-          release_name: "${{ github.event.head_commit.timestamp | date('YYYY.MM.') }}${{ github.run_number }}"
+          release_name: ${{ env.RELEASE_NAME }}
           body: 'Release of SPPKG files'
           draft: false
           prerelease: false
