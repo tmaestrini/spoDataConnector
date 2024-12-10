@@ -10,12 +10,13 @@ permissions:
 
 on:
   push:
-    branches:
-      - "main"
+    tags:
+      - "v*"  # Triggers on any tag starting with 'v'
   workflow_dispatch:
 
 jobs:
   spfx-build:
+    if: github.ref == 'refs/heads/main'  # Only run if push was on main branch
     name: "SPFx Build solution"
     runs-on: ubuntu-latest
 
