@@ -59,21 +59,32 @@ jobs:
 
           SPPKG_FILENAME=$(basename ${SPPKG_PATH})
           echo "SPPKG_FILENAME=${SPPKG_FILENAME}" >> $GITHUB_ENV
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.SPPKG_FILENAME }}
+          path: ${{ env.SPPKG_PATH }}
 
   release:
     needs: spfx-build
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.spfx-build.outputs.sppkg_filename }}
+
       - name: Set new Version Tag and Publish Release
         uses: actions/create-release@v1
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ needs.build.outputs.solution_version }}"
-          release_name: ${{ needs.build.outputs.release_name }}
-          body: "Release ${{ env.SOLUTION_VERSION }}"
+          tag_name: "v${{ needs.spfx-build.outputs.solution_version }}"
+          release_name: ${{ needs.spfx-build.outputs.release_name }}
+          body: "Release ${{ needs.spfx-build.outputs.solution_version }}"
           draft: false
           prerelease: false
 
