@@ -5,8 +5,8 @@
     "graph-connector-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/apiConnector/ApiConnectorWebpart.js",
-          "manifest": "./src/webparts/apiConnector/ApiConnectorWebpart.manifest.json"
+          "entrypoint": "./lib/webparts/apiConnector/ApiConnectorWebPart.js",
+          "manifest": "./src/webparts/apiConnector/ApiConnectorWebPart.manifest.json"
         }
       ]
     }
