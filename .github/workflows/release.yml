@@ -24,13 +24,13 @@ jobs:
         with:
           node-version: 18.x
     
-      - name: Install npm
-        run: npm ci
+      - name: Install node packages
+        run: npm install
 
       - name: Install Gulp (globally)
-        run: npm i -g gulp
+        run: npm install -g gulp
     
-      - name: create solution package (.sppkg)
+      - name: build package (.sppkg)
         run: gulp build
 
       - name: create solution package (.sppkg)
@@ -43,6 +43,7 @@ jobs:
 
       - name: Publish release
         uses: actions/create-release@v1
+        id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -51,5 +52,14 @@ jobs:
           body: 'Release of SPPKG files'
           draft: false
           prerelease: false
-          files: sharepoint/solution/*.sppkg
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: sharepoint/solution/*.sppkg
+          asset_name: solution.sppkg
+          asset_content_type: application/zip
       
