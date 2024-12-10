@@ -4,15 +4,19 @@
 
 name: "Basic SharePoint Framework Build Pipeline (SPFx)"
 
+permissions:
+  contents: write
+  packages: write
+
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   workflow_dispatch:
 
 jobs:
   spfx-build:
-    name: 'SPFx Build solution'
+    name: "SPFx Build solution"
     runs-on: ubuntu-latest
 
     steps:
@@ -23,14 +27,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 18.x
-    
+
       - name: Install node packages
         run: npm install
 
       - name: Install Gulp (globally)
         run: npm install -g gulp
-    
-      - name: build package (.sppkg)
+
+      - name: build solution
         run: gulp build
 
       - name: create solution package (.sppkg)
@@ -47,9 +51,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 'release-${{ github.sha }}'
+          tag_name: "release-${{ github.sha }}"
           release_name: ${{ env.RELEASE_NAME }}
-          body: 'Release of SPPKG files'
+          body: "Release of SPPKG files"
           draft: false
           prerelease: false
 
@@ -62,4 +66,3 @@ jobs:
           asset_path: sharepoint/solution/*.sppkg
           asset_name: solution.sppkg
           asset_content_type: application/zip
-      
