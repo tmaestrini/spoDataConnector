@@ -52,7 +52,7 @@ jobs:
           SOLUTION_VERSION=$(jq -r '.solution.version' ./config/package-solution.json)
           echo "SOLUTION_VERSION=${SOLUTION_VERSION}" >> $GITHUB_ENV
 
-          echo "RELEASE_NAME=$(date +'%Y%m')${GITHUB_RUN_NUMBER}-${SOLUTION_VERSION}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$(date +'%Y%m').${GITHUB_RUN_NUMBER}-${SOLUTION_VERSION}" >> $GITHUB_ENV
 
           SPPKG_PATH=$(find ./sharepoint/solution -name "*.sppkg" -type f)
           echo "SPPKG_PATH=${SPPKG_PATH}" >> $GITHUB_ENV
