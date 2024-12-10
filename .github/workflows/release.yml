@@ -10,13 +10,11 @@ permissions:
 
 on:
   push:
-    tags:
-      - "v*"  # Triggers on any tag starting with 'v'
-  workflow_dispatch:
+    branches:
+      - "main"
 
 jobs:
   spfx-build:
-    if: github.ref == 'refs/heads/main'  # Only run if push was on main branch
     name: "SPFx Build solution"
     runs-on: ubuntu-latest
 
@@ -51,14 +49,14 @@ jobs:
       - name: Set Release Name
         run: echo "RELEASE_NAME=$(date +'%Y%m')${GITHUB_RUN_NUMBER}-${SOLUTION_VERSION}" >> $GITHUB_ENV
 
-      - name: Publish release
+      - name: Set new Version Tag and Publish Release
         uses: actions/create-release@v1
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # tag_name: "${{ github.sha }}"
-          tag_name: ${{ env.RELEASE_NAME }}
+          tag_name: "v${{ env.SOLUTION_VERSION }}"
           release_name: ${{ env.RELEASE_NAME }}
           body: "Release ${{ env.SOLUTION_VERSION }}"
           draft: false
