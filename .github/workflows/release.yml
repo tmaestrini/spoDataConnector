@@ -58,7 +58,7 @@ jobs:
         with:
           tag_name: "release-${{ github.sha }}"
           release_name: ${{ env.RELEASE_NAME }}
-          body: "Release of SPPKG files"
+          body: "Release ${{ env.SOLUTION_VERSION }}"
           draft: false
           prerelease: false
 
@@ -68,6 +68,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: sharepoint/solution/*.sppkg
+          asset_path: ./sharepoint/solution/*.sppkg
           asset_name: solution.sppkg
           asset_content_type: application/zip
