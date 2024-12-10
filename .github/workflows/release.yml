@@ -42,8 +42,13 @@ jobs:
           gulp bundle --ship
           gulp package-solution --ship
 
+      - name: Read Solution Version
+        run: |
+          SOLUTION_VERSION=$(jq -r '.solution.version' ./config/package-solution.json)
+          echo "SOLUTION_VERSION=${SOLUTION_VERSION}" >> $GITHUB_ENV
+
       - name: Set Release Name
-        run: echo "RELEASE_NAME=$(date +'%Y.%m').${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+        run: echo "RELEASE_NAME=$(date +'%Y.%m').${GITHUB_RUN_NUMBER}-${SOLUTION_VERSION}" >> $GITHUB_ENV
 
       - name: Publish release
         uses: actions/create-release@v1
