@@ -30,7 +30,10 @@ jobs:
       - name: Install Gulp (globally)
         run: npm i -g gulp
     
-      - name: build and create solution package (.sppkg)
+      - name: create solution package (.sppkg)
+        run: gulp build
+
+      - name: create solution package (.sppkg)
         run: |
           gulp bundle --ship
           gulp package-solution --ship
