@@ -54,12 +54,16 @@ jobs:
 
           echo "RELEASE_NAME=$(date +'%Y%m').${GITHUB_RUN_NUMBER}-v${SOLUTION_VERSION}" >> $GITHUB_ENV
 
+          # Find original sppkg and create desired solution name (with version)
           SPPKG_PATH=$(find ./sharepoint/solution -name "*.sppkg" -type f)
-          echo "SPPKG_PATH=${SPPKG_PATH}" >> $GITHUB_ENV
+          SPPKG_DIR=$(dirname "${ORIGINAL_SPPKG}")
+          SPPKG_BASE=$(basename "${ORIGINAL_SPPKG}" .sppkg)
+          SOLUTION_PATH="${SPPKG_DIR}/${SPPKG_BASE}-v${SOLUTION_VERSION}.sppkg"
 
-          SPPKG_FILENAME=$(basename ${SPPKG_PATH})
-          echo "SPPKG_FILENAME=${SPPKG_FILENAME}" >> $GITHUB_ENV
-      
+          # Rename file
+          mv "${SPPKG_PATH}" "${SOLUTION_PATH}"
+          echo "SPPKG_PATH=${SOLUTION_PATH}" >> $GITHUB_ENV
+
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
@@ -95,5 +99,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ needs.spfx-build.outputs.sppkg_filename }}
-          asset_name: "${{ needs.spfx-build.outputs.sppkg_filename }}-${{ needs.spfx-build.outputs.solution_version }}"
+          asset_name: "${{ needs.spfx-build.outputs.sppkg_filename }}"
           asset_content_type: application/zip
