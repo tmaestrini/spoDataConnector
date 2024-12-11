@@ -71,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.SPPKG_FILENAME }}
-          path: ${{ env.SPPKG_PATH }}
+          path: ${{ SPPKG_SOLUTION_PATH }}
 
   release:
     needs: spfx-build
