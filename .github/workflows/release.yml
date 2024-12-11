@@ -56,8 +56,8 @@ jobs:
 
           # Find original sppkg and create desired solution name (with version)
           SPPKG_PATH=$(find ./sharepoint/solution -name "*.sppkg" -type f)
-          SPPKG_DIR=$(dirname "${ORIGINAL_SPPKG}")
-          SPPKG_BASE=$(basename "${ORIGINAL_SPPKG}" .sppkg)
+          SPPKG_DIR=$(dirname "${SPPKG_PATH}")
+          SPPKG_BASE=$(basename "${SPPKG_PATH}" .sppkg)
           SOLUTION_PATH="${SPPKG_DIR}/${SPPKG_BASE}-v${SOLUTION_VERSION}.sppkg"
 
           # Rename file
