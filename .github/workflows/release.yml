@@ -63,7 +63,7 @@ jobs:
           echo "SPPKG_FILENAME=${SPPKG_FILENAME}" >> $GITHUB_ENV
 
           # Rename file
-          SPPKG_SOLUTION_PATH="${SPPKG_DIR}/${SPPKG_FILENAME}.sppkg"
+          SPPKG_SOLUTION_PATH="${SPPKG_DIR}/${SPPKG_FILENAME}"
           mv "${SPPKG_PATH}" "${SPPKG_SOLUTION_PATH}"
           echo "SPPKG_PATH=${SPPKG_SOLUTION_PATH}" >> $GITHUB_ENV
 
