@@ -58,11 +58,14 @@ jobs:
           SPPKG_PATH=$(find ./sharepoint/solution -name "*.sppkg" -type f)
           SPPKG_DIR=$(dirname "${SPPKG_PATH}")
           SPPKG_BASE=$(basename "${SPPKG_PATH}" .sppkg)
-          SOLUTION_PATH="${SPPKG_DIR}/${SPPKG_BASE}-v${SOLUTION_VERSION}.sppkg"
+
+          SPPKG_FILENAME="${SPPKG_BASE}-v${SOLUTION_VERSION}.sppkg"
+          echo "SPPKG_FILENAME=${SPPKG_FILENAME}" >> $GITHUB_ENV
 
           # Rename file
-          mv "${SPPKG_PATH}" "${SOLUTION_PATH}"
-          echo "SPPKG_PATH=${SOLUTION_PATH}" >> $GITHUB_ENV
+          SPPKG_SOLUTION_PATH="${SPPKG_DIR}/${SPPKG_FILENAME}.sppkg"
+          mv "${SPPKG_PATH}" "${SPPKG_SOLUTION_PATH}"
+          echo "SPPKG_PATH=${SPPKG_SOLUTION_PATH}" >> $GITHUB_ENV
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
