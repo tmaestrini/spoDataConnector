@@ -95,5 +95,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ${{ needs.spfx-build.outputs.sppkg_filename }}
-          asset_name: "${{ needs.spfx-build.outputs.sppkg_filename }}-${{ needs.spfx-build.outputs.solution_version }}"
+          asset_name: "${{ needs.spfx-build.outputs.sppkg_filename }}"
           asset_content_type: application/zip
