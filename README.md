@@ -26,6 +26,9 @@ It also supports the definition of input parameters from dynamic data sources an
 
 ## Prerequisites
 
+> [!WARNING]
+> As with any SPFx web part, you should always be very careful and clear when granting (Graph) permissions and assign them to users. **As the current implementation is based on the `SharePoint Online Client Extensibility Web Application Principal`, this could lead to a very serious security discussion**. You therefore use this solution at your own risk.
+
 The Microsoft Graph requests made by this web part rely on appropriate Microsoft Graph permissions. Therefore, all desired permissions must be granted by a Global admin through this Entra ID app: `SharePoint Online Client Extensibility Web Application Principal`. This ensures that the web part can access the required data and perform the necessary operations using Microsoft Graph API.
 
 ## Solution
