@@ -4,7 +4,6 @@ import { DisplayMode, Version } from '@microsoft/sp-core-library';
 import {
   DynamicDataSharedDepth,
   type IPropertyPaneConfiguration,
-  IPropertyPaneGroup,
   PropertyPaneDropdown,
   PropertyPaneDynamicField,
   PropertyPaneDynamicFieldSet,
@@ -18,6 +17,7 @@ import { MSGraphClientV3 } from '@microsoft/sp-http';
 import * as strings from 'GraphConnectorWebPartStrings';
 import { ApiSelector, GraphError, GraphResult, IRequestResult, IRequestResultType, SharePointError, SharePointResult } from './models/types';
 import { ApiConnectorFactory } from './ApiConnectorFactory';
+import PropertyPaneGroup from './PropertyPaneGroup';
 
 
 export interface IGraphConnectorWebPartProps {
@@ -153,6 +153,8 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    const configGroup = new PropertyPaneGroup(this.properties, this.dataSourceValues);
+
     return {
       pages: [
         {
@@ -192,8 +194,8 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
                 }),
               ],
             },
-            ...(this.properties.apiSelector === ApiSelector.Graph ? [this.graphPropertyPaneGroup] : []),
-            ...(this.properties.apiSelector === ApiSelector.SharePoint ? [this.sharePointPropertyPaneGroup] : []),
+            ...(this.properties.apiSelector === ApiSelector.Graph ? [configGroup.graphPropertyPaneGroup] : []),
+            ...(this.properties.apiSelector === ApiSelector.SharePoint ? [configGroup.sharePointPropertyPaneGroup] : []),
           ],
         },
         {
@@ -224,89 +226,6 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
             }
           ],
         }
-      ],
-    };
-  }
-
-  private get graphPropertyPaneGroup(): IPropertyPaneGroup {
-    return {
-      groupName: strings.GraphAPI.BasicGroupName,
-      groupFields: [
-        ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
-          text: strings.DataSource.MainDescriptionText,
-        })] : []),
-        ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
-          text: `Example: {{siteTitle}} or {{value}}.`,
-        })] : []),
-        PropertyPaneDropdown('graph.version', {
-          label: strings.GraphAPI.VersionLabel,
-          options: [
-            { key: 'v1.0', text: 'v1.0' },
-            { key: 'beta', text: 'beta' },
-          ],
-        }),
-        PropertyPaneTextField('graph.api', {
-          label: `${strings.GraphAPI.ApiLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
-          placeholder: '/me, /me/manager, /me/joinedTeams, /users',
-          description: `https://graph.microsoft.com${this.properties.graph?.api}`,
-          multiline: true,
-
-        }),
-        PropertyPaneTextField('graph.filter', {
-          label: `${strings.GraphAPI.FilterLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
-          placeholder: `emailAddress eq 'john@contoso.com'`,
-          multiline: true,
-        }),
-        PropertyPaneTextField('graph.select', {
-          label: strings.GraphAPI.SelectLabel,
-          placeholder: 'givenName,surname'
-        }),
-        PropertyPaneTextField('graph.expand', {
-          label: strings.GraphAPI.ExpandLabel,
-          placeholder: 'members',
-        }),
-      ],
-    };
-  }
-
-  private get sharePointPropertyPaneGroup(): IPropertyPaneGroup {
-    return {
-      groupName: strings.SharePointAPI.BasicGroupName,
-      groupFields: [
-        ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
-          text: strings.DataSource.MainDescriptionText,
-        })] : []),
-        ...(this.properties.sourceSelector === 'dynamicData' ? [PropertyPaneLabel('dataSourceSelectedLabel', {
-          text: `Example: {{siteTitle}} or {{value}}.`,
-        })] : []),
-        PropertyPaneDropdown('sharePoint.version', {
-          label: strings.SharePointAPI.VersionLabel,
-          options: [
-            { key: 'v1.0', text: 'v1.0' },
-            { key: 'v2.0', text: 'v2.0' },
-          ],
-        }),
-        PropertyPaneTextField('sharePoint.api', {
-          label: `${strings.SharePointAPI.ApiLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
-          placeholder: `https://{site}.sharepoint.com/_api/site, https://{site}.sharepoint.com/_api/lists/getbytitle('listname')`,
-          description: `${this.properties.sharePoint?.api}`,
-          multiline: true,
-          rows: 4,
-        }),
-        PropertyPaneTextField('sharePoint.filter', {
-          label: `${strings.SharePointAPI.FilterLabel} ${this.dataSourceValues ? '👇 use dynamic data' : ''}`,
-          placeholder: `Title eq 'Alfred'`,
-          multiline: true,
-          description: `Also see reference: https://learn.microsoft.com/en-us/sharepoint/dev/sp-add-ins/use-odata-query-operations-in-sharepoint-rest-requests#select-items-to-return`,
-        }),
-        PropertyPaneTextField('sharePoint.select', {
-          label: strings.SharePointAPI.SelectLabel,
-          placeholder: 'Title,Products/Name'
-        }),
-        PropertyPaneTextField('sharePoint.expand', {
-          label: strings.SharePointAPI.ExpandLabel,
-          placeholder: 'Products/Name',
-        }),
       ],
     };
   }
