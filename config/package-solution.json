@@ -3,7 +3,7 @@
   "solution": {
     "name": "tmaestrini-api-connect-client-side-solution",
     "id": "85cb422c-d7cd-409f-b3fc-9fc2dab501ff",
-    "version": "1.2.0.0",
+    "version": "1.2.1.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
