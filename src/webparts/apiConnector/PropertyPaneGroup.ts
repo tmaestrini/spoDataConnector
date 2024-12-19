@@ -1,6 +1,7 @@
 import { IPropertyPaneGroup, PropertyPaneDropdown, PropertyPaneLabel, PropertyPaneTextField } from "@microsoft/sp-property-pane";
 import * as strings from 'GraphConnectorWebPartStrings';
 import { IGraphConnectorWebPartProps } from "./ApiConnectorWebPart";
+import { AuthSelector } from "./models/types";
 
 export default class PropertyPaneGroup {
 
@@ -93,5 +94,41 @@ export default class PropertyPaneGroup {
         }),
       ],
     };
+  }
+
+  public get entraIdAuthPropertyPaneGroups(): IPropertyPaneGroup[] {
+    return [
+      {
+        groupName: "Authentication",
+        groupFields: [
+          PropertyPaneDropdown('authSelector', {
+            label: 'Authentication Mode',
+            options: [
+              { key: AuthSelector.EntraIdApp, text: 'Entra ID app registration' },
+              { key: AuthSelector.SPFx, text: 'built-in SFFx Authentication' },
+            ],
+          }),
+          ...(this.properties.authSelector === AuthSelector.SPFx ? [PropertyPaneLabel('authSelectorWarning', {
+            text: `⚠️ Warning: Built-in SFFx Authentication is not recommended for production use. This could lead to serious security vulnerabilities.`,
+          })] : [])
+        ]
+      },
+      ...(this.properties.authSelector === AuthSelector.EntraIdApp ? [{
+        groupName: `Setup`,
+        groupFields: [
+          PropertyPaneTextField('entraId.appId', {
+            label: `Entra ID App registration`,
+            placeholder: `9fedeb5c-3ad0-4b7c-9f29-c70c52a4420b`,
+            description: `Insert the client Id of your Entra ID app registration`,
+          }),
+          PropertyPaneTextField('entraId.scopes', {
+            label: `API Scopes`,
+            placeholder: ``,
+            multiline: true,
+            description: `Should match the permission scopes defined in your Entra ID app registration`,
+          }),
+        ],
+      }] : [])
+    ];
   }
 }

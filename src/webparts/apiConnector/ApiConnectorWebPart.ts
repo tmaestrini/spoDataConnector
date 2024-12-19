@@ -15,7 +15,7 @@ import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from '@microsoft/sp
 import { DynamicProperty, IReadonlyTheme } from '@microsoft/sp-component-base';
 import { MSGraphClientV3 } from '@microsoft/sp-http';
 import * as strings from 'GraphConnectorWebPartStrings';
-import { ApiSelector, GraphError, GraphResult, IRequestResult, IRequestResultType, SharePointError, SharePointResult } from './models/types';
+import { ApiSelector, AuthSelector, GraphError, GraphResult, IRequestResult, IRequestResultType, SharePointError, SharePointResult } from './models/types';
 import { ApiConnectorFactory } from './ApiConnectorFactory';
 import PropertyPaneGroup from './PropertyPaneGroup';
 
@@ -24,6 +24,7 @@ export interface IGraphConnectorWebPartProps {
   sourceSelector: 'none' | 'dynamicData';
   dataSource?: DynamicProperty<undefined>;
   apiSelector: ApiSelector;
+  authSelector: AuthSelector;
 
   graph: {
     api: string;
@@ -157,6 +158,13 @@ export default class ApiConnectorWebpart extends BaseClientSideWebPart<IGraphCon
 
     return {
       pages: [
+        {
+          header: {
+            description: "Choose your desired Authentication mechanism: either explicit (via dedicated Entra ID app registration) or implicit (via built-in mechanism from SharePoint Framework).",
+          },
+          groups: 
+            configGroup.entraIdAuthPropertyPaneGroups
+        },
         {
           header: {
             description: strings.PropertyPaneDescription,

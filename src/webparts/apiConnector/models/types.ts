@@ -41,3 +41,8 @@ export enum ApiSelector {
   SharePoint = 'sharePointApi'
 }
 
+export enum AuthSelector {
+  EntraIdApp = 'EntraIdApp',
+  SPFx = 'SPFx'
+}
+
